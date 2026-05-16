@@ -14,6 +14,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
 
 jobs:
   sync-images:
@@ -49,14 +50,23 @@ jobs:
           R2_BLOG_PUBLIC_HOST: ${{ vars.R2_BLOG_PUBLIC_HOST != '' && vars.R2_BLOG_PUBLIC_HOST || secrets.R2_BLOG_PUBLIC_HOST }}
         run: pnpm run images:sync:r2
 
-      - name: Commit rewritten blog content
+      - name: Open pull request for rewritten blog content
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           if [ -n "$(git status --porcelain content/blog)" ]; then
+            branch="automation/sync-blog-images-${GITHUB_RUN_ID}"
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git switch -c "$branch"
             git add content/blog
             git commit -m "chore(images): sync blog images to R2 [skip ci]"
-            git push
+            git push --set-upstream origin "$branch"
+            gh pr create \
+              --base main \
+              --head "$branch" \
+              --title "chore(images): sync blog images to R2" \
+              --body "Automated blog image R2 sync from workflow run ${GITHUB_RUN_ID}."
           else
             echo "No blog image sync changes detected."
           fi
