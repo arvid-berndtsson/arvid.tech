@@ -1,0 +1,19 @@
+---
+/**
+ * Shared content width wrapper: padding (px-4 sm:px-6 lg:px-8) + centered max-w-screen-lg.
+ * Use for consistent horizontal alignment with the header and landing page sections.
+ * NavBar and Footer use the same pattern; this component centralizes it for Astro pages.
+ */
+interface Props {
+  /** Inner element: 'div' (default) or 'article' for article/slug pages */
+  innerTag?: 'div' | 'article';
+}
+
+const { innerTag = 'div' } = Astro.props;
+const InnerTag = innerTag;
+---
+<div class="px-4 sm:px-6 lg:px-8">
+  <InnerTag class="mx-auto max-w-screen-lg">
+    <slot />
+  </InnerTag>
+</div>

@@ -1,0 +1,336 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ContentContainer from '../../components/ContentContainer.astro';
+import ProseContent from '../../components/ProseContent.astro';
+import { GitHubCard } from '../../components/GitHubCard';
+import { getCollection, getEntries, render, type CollectionEntry } from 'astro:content';
+import { categoryLabels, getProjectsByCategory, PROJECT_CATEGORIES, sortProjectsByPublishedDate, statusLabel, type ProjectCategory } from '../../lib/projects';
+
+export const prerender = true;
+
+type ProjectEntry = CollectionEntry<'projects'>;
+type ThoughtEntry = CollectionEntry<'blog'>;
+
+interface CategoryProps {
+  kind: 'category';
+  slug: ProjectCategory;
+  projects: ProjectEntry[];
+  featured: ProjectEntry[];
+  relatedResearch: ThoughtEntry[];
+}
+
+interface ProjectProps {
+  kind: 'project';
+  slug: string;
+  project: ProjectEntry;
+  categoryProjects: ProjectEntry[];
+  relatedPosts: ThoughtEntry[];
+}
+
+type Props = CategoryProps | ProjectProps;
+
+const categoryDescriptions: Record<ProjectCategory, string> = {
+  'offensive-security':
+    'Tooling and workflows for adversary simulation, security testing, and control validation.',
+  compliance:
+    'Practical compliance and governance projects focused on turning standards into clear implementation paths.',
+  other:
+    'Product and app builds across web, platform, and tooling work.',
+};
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  const posts = await getCollection('blog');
+  const projectSlugs = new Set(projects.map((project) => project.id));
+
+  for (const category of PROJECT_CATEGORIES) {
+    if (projectSlugs.has(category)) {
+      throw new Error(`Project slug "${category}" conflicts with reserved category route /projects/${category}.`);
+    }
+  }
+
+  const projectPaths = await Promise.all(
+    projects.map(async (project) => {
+      const relatedPostEntries = project.data.relatedResearch
+        ? await getEntries(project.data.relatedResearch)
+        : [];
+      const relatedPosts = relatedPostEntries.filter(
+        (entry): entry is ThoughtEntry => Boolean(entry),
+      );
+
+      return {
+        params: { slug: project.id },
+        props: {
+          kind: 'project',
+          slug: project.id,
+          project,
+          categoryProjects: sortProjectsByPublishedDate(
+            projects.filter((entry) => entry.data.category === project.data.category),
+          )
+            .filter((entry) => entry.id !== project.id)
+            .slice(0, 3),
+          relatedPosts,
+        } satisfies ProjectProps,
+      };
+    }),
+  );
+
+  const categoryPaths = PROJECT_CATEGORIES.map((category) => {
+    const categoryProjects = getProjectsByCategory(projects, category);
+    const relatedResearch = posts
+      .filter((post) => (post.data.tags ?? []).some((tag) => ['security', 'compliance', 'governance', 'red-team', 'pentest'].includes(tag)))
+      .slice(0, 8);
+
+    return {
+      params: { slug: category },
+      props: {
+        kind: 'category',
+        slug: category,
+        projects: categoryProjects,
+        featured: categoryProjects.filter((project) => project.data.featured),
+        relatedResearch,
+      } satisfies CategoryProps,
+    };
+  });
+
+  return [...projectPaths, ...categoryPaths];
+}
+
+const props = Astro.props as Props;
+const pathSlug = Astro.params.slug ?? '';
+const isCategoryPage = PROJECT_CATEGORIES.includes(pathSlug as ProjectCategory) && props.kind === 'category';
+
+const itemListData = isCategoryPage
+  ? {
+      '@context': 'https://schema.org',
+      '@type': 'ItemList',
+      name: `${categoryLabels[props.slug]} projects`,
+      itemListElement: props.projects.map((project, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        url: `https://arvid.tech/projects/${project.id}`,
+        name: project.data.title,
+      })),
+    }
+  : undefined;
+
+const softwareSourceCodeData = props.kind === 'project'
+  ? {
+      '@context': 'https://schema.org',
+      '@type': 'SoftwareSourceCode',
+      name: props.project.data.title,
+      description: props.project.data.summary,
+      codeRepository: props.project.data.repoUrl,
+      programmingLanguage: props.project.data.language,
+      url: `https://arvid.tech/projects/${props.project.id}`,
+      datePublished: props.project.data.publishedDate.toISOString(),
+      dateModified: props.project.data.updatedDate.toISOString(),
+      keywords: props.project.data.tags.join(', '),
+    }
+  : undefined;
+
+const renderedProject = props.kind === 'project' ? await render(props.project) : null;
+const ProjectContent = renderedProject?.Content;
+---
+
+{isCategoryPage ? (
+  <BaseLayout
+    title={`${categoryLabels[props.slug]} Projects – Arvid Berndtsson`}
+    description={categoryDescriptions[props.slug]}
+    structuredData={itemListData}
+  >
+    <div class="bg-background pt-8 pb-16">
+      <ContentContainer>
+        <header class="mb-10">
+          <p class="text-xs font-semibold uppercase tracking-[0.2em] text-amber-800 dark:text-amber-400 mb-3">Projects Category</p>
+          <h1 class="text-4xl sm:text-5xl font-bold tracking-tight mb-4">{categoryLabels[props.slug]}</h1>
+          <p class="text-lg text-muted-foreground max-w-3xl">{categoryDescriptions[props.slug]}</p>
+        </header>
+
+        {props.slug === 'offensive-security' && (
+          <>
+            <section class="mb-10">
+              <h2 class="text-2xl font-semibold tracking-tight mb-4">Featured offensive projects</h2>
+              <ul class="space-y-3">
+                {props.featured.map((project) => (
+                  <li>
+                    <a href={`/projects/${project.id}`} class="font-semibold text-orange-700 dark:text-orange-400 hover:underline">{project.data.title}</a>
+                    <p class="text-sm text-muted-foreground">{project.data.summary}</p>
+                  </li>
+                ))}
+              </ul>
+            </section>
+
+            <section class="mb-10">
+              <h2 class="text-2xl font-semibold tracking-tight mb-4">Full offensive project list</h2>
+              <ul class="space-y-3">
+                {props.projects.map((project) => (
+                  <li class="rounded-xl border border-border/60 p-4">
+                    <div class="flex flex-wrap items-center justify-between gap-3">
+                      <a href={`/projects/${project.id}`} class="font-semibold text-orange-700 dark:text-orange-400 hover:underline">{project.data.title}</a>
+                      <span class="text-xs rounded-full bg-muted px-3 py-1">{statusLabel(project.data.status)}</span>
+                    </div>
+                    <p class="text-sm text-muted-foreground mt-2">{project.data.summary}</p>
+                  </li>
+                ))}
+              </ul>
+            </section>
+
+            <section class="mb-10">
+              <h2 class="text-2xl font-semibold tracking-tight mb-4">Related research links</h2>
+              <ul class="space-y-2">
+                {props.relatedResearch.map((post) => (
+                  <li>
+                    <a href={`/blog/${post.id}`} class="text-orange-700 dark:text-orange-400 hover:underline">{post.data.title}</a>
+                  </li>
+                ))}
+              </ul>
+            </section>
+
+            <section>
+              <h2 class="text-2xl font-semibold tracking-tight mb-3">Next step</h2>
+              <p class="text-muted-foreground">
+                Continue to the <a href="/tools" class="font-semibold text-orange-700 dark:text-orange-400 hover:underline">tools catalog</a> or return to the <a href="/projects" class="font-semibold text-orange-700 dark:text-orange-400 hover:underline">complete project index</a>.
+              </p>
+            </section>
+          </>
+        )}
+
+        {props.slug !== 'offensive-security' && (
+          <>
+            <section class="mb-10">
+              <h2 class="text-2xl font-semibold tracking-tight mb-4">Project list</h2>
+              <ul class="space-y-3">
+                {props.projects.map((project) => (
+                  <li class="rounded-xl border border-border/60 p-4">
+                    <div class="flex flex-wrap items-center justify-between gap-3">
+                      <a href={`/projects/${project.id}`} class="font-semibold text-orange-700 dark:text-orange-400 hover:underline">{project.data.title}</a>
+                      <span class="text-xs rounded-full bg-muted px-3 py-1">{statusLabel(project.data.status)}</span>
+                    </div>
+                    <p class="text-sm text-muted-foreground mt-2">{project.data.summary}</p>
+                  </li>
+                ))}
+              </ul>
+            </section>
+            <p class="text-muted-foreground">
+              Explore supporting writeups in <a href="/security-research" class="font-semibold text-orange-700 dark:text-orange-400 hover:underline">security research</a>, or return to the <a href="/projects" class="font-semibold text-orange-700 dark:text-orange-400 hover:underline">projects index</a>.
+            </p>
+          </>
+        )}
+      </ContentContainer>
+    </div>
+  </BaseLayout>
+) : (
+  <BaseLayout
+    title={`${props.project.data.title} Project – Arvid Berndtsson`}
+    description={props.project.data.summary}
+    structuredData={softwareSourceCodeData}
+  >
+    <div class="bg-background pt-8 pb-16">
+      <ContentContainer innerTag="article">
+        <header class="mb-12">
+          <div class="flex flex-wrap gap-2 mb-5 text-sm">
+            <a href="/projects" class="text-orange-700 dark:text-orange-400 hover:underline">Projects</a>
+            <span class="text-muted-foreground">/</span>
+            <a href={`/projects/${props.project.data.category}`} class="text-orange-700 dark:text-orange-400 hover:underline">{categoryLabels[props.project.data.category]}</a>
+            <span class="text-muted-foreground">/</span>
+            <span class="text-muted-foreground">{props.project.data.title}</span>
+          </div>
+
+          <h1 class="text-4xl sm:text-5xl font-bold tracking-tight text-foreground mb-5">{props.project.data.title}</h1>
+          <p class="text-lg text-muted-foreground mb-5">{props.project.data.summary}</p>
+          <div class="flex flex-wrap gap-2 text-xs">
+            <span class="rounded-full bg-muted px-3 py-1">{categoryLabels[props.project.data.category]}</span>
+            <span class="rounded-full bg-muted px-3 py-1">{statusLabel(props.project.data.status)}</span>
+            <span class="rounded-full bg-muted px-3 py-1">{props.project.data.language}</span>
+            {props.project.data.tags.map((tag) => (
+              <a href={`/tags/${tag}`} class="rounded-full bg-muted px-3 py-1 hover:text-orange-600 dark:hover:text-orange-400">{tag}</a>
+            ))}
+          </div>
+        </header>
+
+        {ProjectContent && (
+          <section class="mb-12">
+            <h2 class="text-2xl font-semibold tracking-tight mb-3">Implementation notes</h2>
+            <ProseContent>
+              <ProjectContent components={{ GitHubCard }} />
+            </ProseContent>
+          </section>
+        )}
+        <section class="mt-14 border-t border-border/60 pt-10">
+          <h2 class="text-2xl font-semibold tracking-tight mb-6">Project snapshot</h2>
+          <section class="mb-10">
+            <h3 class="text-xl font-semibold tracking-tight mb-3">Problem</h3>
+            <p class="text-foreground/90">{props.project.data.problem}</p>
+          </section>
+          <section class="mb-10">
+            <h3 class="text-xl font-semibold tracking-tight mb-3">What it does</h3>
+            <ul class="list-disc pl-5 space-y-2">{props.project.data.whatItDoes.map((item) => <li>{item}</li>)}</ul>
+          </section>
+          <section class="mb-10">
+            <h3 class="text-xl font-semibold tracking-tight mb-3">Use cases</h3>
+            <ul class="list-disc pl-5 space-y-2">{props.project.data.useCases.map((item) => <li>{item}</li>)}</ul>
+          </section>
+          <section class="mb-10">
+            <h3 class="text-xl font-semibold tracking-tight mb-3">Stack and architecture</h3>
+            <ul class="list-disc pl-5 space-y-2">{props.project.data.stackArchitecture.map((item) => <li>{item}</li>)}</ul>
+          </section>
+          <section>
+            <h3 class="text-xl font-semibold tracking-tight mb-3">Status and roadmap</h3>
+            <p class="mb-3 text-foreground/90">
+              Current status: <strong>{statusLabel(props.project.data.status)}</strong>. Published {props.project.data.publishedDate.toLocaleDateString('en-US')} and last updated {props.project.data.updatedDate.toLocaleDateString('en-US')}.
+            </p>
+            <ul class="list-disc pl-5 space-y-2">{props.project.data.roadmap.map((item) => <li>{item}</li>)}</ul>
+          </section>
+        </section>
+        <section class="mt-14 border-t border-border/60 pt-10">
+          <section class="mb-10">
+            <h2 class="text-2xl font-semibold tracking-tight mb-3">Links</h2>
+            <ul class="space-y-2">
+              {props.project.data.repoUrl && <li><a href={props.project.data.repoUrl} target="_blank" rel="noopener noreferrer" class="text-orange-700 dark:text-orange-400 hover:underline">Source repository</a></li>}
+              {props.project.data.docsUrl && <li><a href={props.project.data.docsUrl} target="_blank" rel="noopener noreferrer" class="text-orange-700 dark:text-orange-400 hover:underline">Documentation</a></li>}
+              {props.project.data.demoUrl && <li><a href={props.project.data.demoUrl} target="_blank" rel="noopener noreferrer" class="text-orange-700 dark:text-orange-400 hover:underline">Live demo</a></li>}
+              {props.project.data.repoUrl && <li><a href={`${props.project.data.repoUrl}/releases`} target="_blank" rel="noopener noreferrer" class="text-orange-700 dark:text-orange-400 hover:underline">Release notes</a></li>}
+            </ul>
+          </section>
+          <section class="mb-10">
+            <h2 class="text-2xl font-semibold tracking-tight mb-3">Related research posts</h2>
+            {props.relatedPosts.length > 0 ? (
+              <ul class="space-y-2">
+                {props.relatedPosts.map((post) => (
+                  <li>
+                    <a href={`/blog/${post.id}`} class="text-orange-700 dark:text-orange-400 hover:underline">{post.data.title}</a>
+                    {post.data.summary && <span class="text-muted-foreground"> - {post.data.summary}</span>}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p class="text-muted-foreground">
+                Browse the <a href="/security-research" class="text-orange-700 dark:text-orange-400 hover:underline">security research hub</a> for related writing.
+              </p>
+            )}
+          </section>
+          {props.categoryProjects.length > 0 && (
+            <section class="mb-10">
+              <h2 class="text-2xl font-semibold tracking-tight mb-3">More in this category</h2>
+              <ul class="space-y-2">
+                {props.categoryProjects.map((entry) => (
+                  <li>
+                    <a href={`/projects/${entry.id}`} class="text-orange-700 dark:text-orange-400 hover:underline">{entry.data.title}</a>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+          <section>
+            <p>
+              <a href={`/projects/${props.project.data.category}`} class="text-orange-700 dark:text-orange-400 hover:underline">
+                Back to {categoryLabels[props.project.data.category]} projects
+              </a>
+            </p>
+          </section>
+        </section>
+      </ContentContainer>
+    </div>
+  </BaseLayout>
+)}

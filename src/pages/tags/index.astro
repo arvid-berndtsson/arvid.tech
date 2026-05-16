@@ -1,0 +1,53 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ContentContainer from '../../components/ContentContainer.astro';
+import { getCollection } from 'astro:content';
+import { buttonVariants } from '../../components/ui/button';
+
+// Get all content and extract tags
+const allPosts = await getCollection('blog');
+const allProjects = await getCollection('projects');
+const allExperiences = await getCollection('experiences');
+
+const tagCounts = new Map<string, number>();
+
+[...allPosts, ...allProjects, ...allExperiences].forEach(item => {
+  item.data.tags?.forEach(tag => {
+    tagCounts.set(tag, (tagCounts.get(tag) || 0) + 1);
+  });
+});
+
+const sortedTags = Array.from(tagCounts.entries())
+  .sort((a, b) => b[1] - a[1]);
+---
+
+<BaseLayout 
+  title="Tags – Arvid Berndtsson" 
+  description="Browse content by topic: security, development, projects, and more."
+>
+  <div class="bg-background pt-8 pb-16">
+    <ContentContainer>
+      <header class="mb-14">
+        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-orange-600 dark:text-orange-400 mb-3">Topics</p>
+        <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-foreground mb-4">
+          Tags
+        </h1>
+        <p class="text-lg text-muted-foreground max-w-2xl">
+          Browse content by topic: security, development, projects, and more.
+        </p>
+      </header>
+
+      <div class="flex flex-wrap gap-3">
+        {sortedTags.map(([tag, count]) => (
+          <a 
+            href={`/tags/${tag}`}
+            class={buttonVariants({ variant: 'outline', class: 'rounded-full' })}
+          >
+            <span class="text-sm font-medium">{tag}</span>
+            <span class="text-xs text-muted-foreground">({count})</span>
+          </a>
+        ))}
+      </div>
+    </ContentContainer>
+  </div>
+</BaseLayout>

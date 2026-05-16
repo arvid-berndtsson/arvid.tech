@@ -1,0 +1,143 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ContentContainer from '../../components/ContentContainer.astro';
+import ExperienceTimeline from '../../components/ExperienceTimeline.astro';
+import { getCollection } from 'astro:content';
+import { ContentCard } from '../../components/ContentCard';
+import { toBlogSlug } from '../../lib/content-slugs';
+import { toImageSrc } from '../../lib/content-images';
+
+export const prerender = true;
+
+export async function getStaticPaths() {
+  const allPosts = await getCollection('blog');
+  const allProjects = await getCollection('projects');
+  const allExperiences = await getCollection('experiences');
+
+  const tags = new Set<string>();
+  [...allPosts, ...allProjects, ...allExperiences].forEach(item => {
+    item.data.tags?.forEach(tag => tags.add(tag));
+  });
+
+  return Array.from(tags).map(tag => ({
+    params: { tag },
+    props: { tag },
+  }));
+}
+
+const { tag } = Astro.props;
+
+// Get all content with this tag
+const allPosts = await getCollection('blog');
+const allProjects = await getCollection('projects');
+const allExperiences = await getCollection('experiences');
+
+const taggedPosts = allPosts
+  .filter(t => t.data.tags?.includes(tag))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const taggedProjects = allProjects
+  .filter(p => p.data.tags?.includes(tag))
+  .sort((a, b) => b.data.updatedDate.valueOf() - a.data.updatedDate.valueOf());
+
+const taggedExperiences = allExperiences
+  .filter(e => e.data.tags?.includes(tag))
+  .sort((a, b) => b.data.startDate.valueOf() - a.data.startDate.valueOf());
+
+const totalCount = taggedPosts.length + taggedProjects.length + taggedExperiences.length;
+---
+
+<BaseLayout 
+  title={`${tag} – Tags – Arvid Berndtsson`}
+  description={`Content tagged with ${tag}`}
+>
+  <div class="bg-background pt-8 pb-16">
+    <ContentContainer>
+      <header class="mb-14">
+        <a 
+          href="/tags" 
+          class="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors mb-8"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+          </svg>
+          All tags
+        </a>
+        
+        <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-foreground mb-4">
+          {tag}
+        </h1>
+        <p class="text-lg text-muted-foreground">
+          {totalCount} {totalCount === 1 ? 'item' : 'items'} tagged with {tag}
+        </p>
+      </header>
+
+      <!-- Blog -->
+      {taggedPosts.length > 0 && (
+        <section class="mb-14">
+          <h2 class="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground mb-6">
+            Blog ({taggedPosts.length})
+          </h2>
+          <div class="space-y-4">
+            {taggedPosts.map((post) => (
+              <article>
+                <ContentCard
+                  variant="post"
+                  slug={toBlogSlug(post.id)}
+                  title={post.data.title}
+                  summary={post.data.summary ?? undefined}
+                  tags={post.data.tags ?? []}
+                  date={post.data.date.toISOString()}
+                  coverImage={toImageSrc(post.data.coverImage ?? post.data.featuredImage)}
+                  coverImageAlt={post.data.coverImageAlt ?? undefined}
+                  titleLevel="h3"
+                  showExtraTags={false}
+                />
+              </article>
+            ))}
+          </div>
+        </section>
+      )}
+
+      <!-- Projects -->
+      {taggedProjects.length > 0 && (
+        <section class="mb-14">
+          <h2 class="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground mb-6">
+            Projects ({taggedProjects.length})
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {taggedProjects.map((project) => (
+              <article>
+                <ContentCard
+                  variant="project"
+                  slug={project.id}
+                  title={project.data.title}
+                  summary={project.data.summary}
+                  tags={project.data.tags}
+                  date={project.data.updatedDate.toISOString()}
+                  repoUrl={project.data.repoUrl ?? undefined}
+                  demoUrl={project.data.demoUrl ?? undefined}
+                  coverImage={project.data.coverImage ?? undefined}
+                  coverImageAlt={project.data.coverImageAlt ?? undefined}
+                  titleLevel="h3"
+                  showExtraTags={false}
+                />
+              </article>
+            ))}
+          </div>
+        </section>
+      )}
+
+      <!-- Experiences -->
+      {taggedExperiences.length > 0 && (
+        <section class="mb-14" aria-labelledby="experiences-heading">
+          <h2 id="experiences-heading" class="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground mb-6">
+            Experiences ({taggedExperiences.length})
+          </h2>
+          <ExperienceTimeline experiences={taggedExperiences} compact titleLevel="h3" />
+        </section>
+      )}
+
+    </ContentContainer>
+  </div>
+</BaseLayout>

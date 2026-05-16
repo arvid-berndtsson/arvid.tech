@@ -1,0 +1,76 @@
+[tools]
+node = "24"     # local pin
+pnpm = "latest"
+
+[tasks.dev]
+run = "pnpm dev"
+
+[tasks.clean]
+run = "rm -rf .astro dist"
+
+[tasks.build]
+run = "pnpm build"
+
+[tasks.preview]
+run = "mise run clean && pnpm run preview"
+
+[tasks.deploy]
+run = "pnpm run deploy:cf"
+
+[tasks.format]
+run = "pnpm prettier --write ."
+
+[tasks.lint]
+run = "pnpm lint"
+
+[tasks.pre-commit]
+run = "mise run format && mise run lint"
+
+
+[tasks.audit-accessibility]
+description = "Run Lighthouse and axe (requires Chrome/Node)"
+run = "node scripts/run-a11y-audit.ts"
+
+[tasks.a11y-ci]
+description = "Start dev server and run Playwright (includes axe a11y)"
+run = "pnpm test:a11y"
+
+[tasks.fetch-meta]
+description = "Fetch and print page <title>, meta description and OG tags from a URL (use env URL or defaults to http://localhost:4321/)"
+run = "node scripts/fetch-meta.ts"
+
+[tasks.check-unicode]
+description = "Check for invisible Unicode characters (dry run)"
+run = "node scripts/clean-unicode.js --dry-run"
+
+[tasks.clean-unicode]
+description = "Remove invisible Unicode characters from all files"
+run = "node scripts/clean-unicode.js"
+
+[tasks.test]
+description = "Run all tests (E2E + accessibility)"
+run = "pnpm test"
+
+[tasks.test-e2e]
+description = "Run Playwright E2E tests"
+run = "pnpm test:e2e"
+
+[tasks.test-e2e-ui]
+description = "Run Playwright tests in UI mode"
+run = "pnpm test:e2e:ui"
+
+[tasks.test-a11y]
+description = "Run accessibility tests (Playwright + axe)"
+run = "pnpm test:a11y"
+
+[tasks.test-report]
+description = "Show Playwright test report"
+run = "pnpm test:report"
+
+[tasks.test-wrangler]
+description = "Test Cloudflare Pages deployment (dry-run)"
+run = "pnpm test:wrangler"
+
+[tasks.test-local]
+description = "Test Cloudflare Pages locally with wrangler dev (localhost:8788)"
+run = "pnpm test:local"

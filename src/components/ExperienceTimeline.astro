@@ -1,0 +1,125 @@
+---
+/**
+ * Vertical timeline for experience entries. Uses semantic list, timeline line + dots,
+ * and per-item: date, role (heading), company, summary, tags, link to detail.
+ */
+interface ExperienceItem {
+  slug: string;
+  data: {
+    role: string;
+    company: string;
+    startDate: Date;
+    endDate?: Date;
+    summary?: string;
+    tags?: string[];
+  };
+}
+
+const MAX_TAGS = 5;
+const metaLabelClass =
+  "text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground";
+const titleClass =
+  "font-semibold tracking-tight text-lg text-foreground hover:text-amber-700 dark:hover:text-amber-500 transition-colors";
+const tagPillClass =
+  "rounded-full bg-muted/80 dark:bg-muted/60 px-3 py-1 text-xs font-medium text-muted-foreground";
+
+interface Props {
+  experiences: ExperienceItem[];
+  /** When true, show less detail (e.g. for tag page). */
+  compact?: boolean;
+  /** Heading level for each role. Default h2. */
+  titleLevel?: "h2" | "h3";
+}
+
+const { experiences, compact = false, titleLevel = "h2" } = Astro.props;
+
+function formatDateRange(
+  start: Date,
+  end: Date | undefined
+): { text: string; startIso: string } {
+  const startIso = start.toISOString();
+  const startStr = start.toLocaleDateString("en-US", {
+    month: "short",
+    year: "numeric",
+  });
+  const endStr = end
+    ? end.toLocaleDateString("en-US", { month: "short", year: "numeric" })
+    : "Present";
+  return { text: `${startStr} – ${endStr}`, startIso };
+}
+
+function getDisplayTags(tags: string[]) {
+  const display = tags.slice(0, MAX_TAGS);
+  const overflow = tags.length - MAX_TAGS;
+  return { display, overflow };
+}
+---
+
+<ol
+  class="relative pl-8 md:pl-0 list-none"
+  aria-label="Work experience timeline"
+>
+  <div
+    class="absolute left-3 md:left-0 top-0 bottom-0 w-px bg-border"
+    aria-hidden="true"
+  />
+  {
+    experiences.map((experience) => {
+      const { role, company, startDate, endDate, summary, tags } =
+        experience.data;
+      const href = `/experiences/${experience.id}`;
+      const { text: dateText, startIso } = formatDateRange(
+        startDate,
+        endDate ?? undefined
+      );
+      const tagList = tags ?? [];
+      const { display: displayTags, overflow } = getDisplayTags(tagList);
+      const TitleTag = titleLevel;
+      return (
+        <li class="relative mb-10 last:mb-0">
+          <div
+            class="absolute left-[-21px] md:left-[-8px] top-7 w-4 h-4 rounded-full bg-orange-600 dark:bg-orange-500 border-4 border-background z-10"
+            aria-hidden="true"
+          />
+          <article class="md:ml-8">
+            <a
+              href={href}
+              class="flex flex-col rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            >
+              <time
+                class={metaLabelClass}
+                dateTime={startIso}
+              >
+                {dateText}
+              </time>
+              <TitleTag class={`${titleClass} mt-1 mb-0.5`}>
+                {role}
+              </TitleTag>
+              <p class="text-sm text-muted-foreground">{company}</p>
+              {!compact && summary && (
+                <p class="mt-2 text-muted-foreground text-sm leading-relaxed">
+                  {summary}
+                </p>
+              )}
+              {tagList.length > 0 && (
+                <div class="flex flex-wrap gap-2 mt-3 max-h-[3.5rem] overflow-hidden">
+                  {displayTags.map((tag) => (
+                    <span class={tagPillClass}>{tag}</span>
+                  ))}
+                  {overflow > 0 && (
+                    <span
+                      class={tagPillClass}
+                      aria-label={`${overflow} more tags`}
+                    >
+                      +{overflow}
+                    </span>
+                  )}
+                </div>
+              )}
+            </a>
+          </article>
+        </li>
+      );
+    })
+  }
+</ol>

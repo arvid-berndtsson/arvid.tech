@@ -1,0 +1,25 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { TestSearchBox } from '../components/TestSearchBox';
+---
+
+<BaseLayout
+  title="Test search – Arvid Berndtsson"
+  description="Test page for search box design (Deno-style and similar)."
+  noindex={true}
+>
+  <div class="min-h-[calc(100vh-4rem)] flex flex-col items-center justify-center px-4 py-12 bg-zinc-200 dark:bg-zinc-950">
+    <div class="w-full max-w-2xl space-y-8">
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-widest text-amber-800 dark:text-amber-400 mb-3">
+          Test search
+        </p>
+        <p class="text-muted-foreground text-sm mb-6">
+          Opposite background so the search box stands out. Shadcn Command shell (Deno-style) wraps Pagefind search.
+        </p>
+      </div>
+
+      <TestSearchBox client:load bundlePath="/pagefind/" />
+    </div>
+  </div>
+</BaseLayout>

@@ -1,0 +1,33 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ContentContainer from '../components/ContentContainer.astro';
+---
+
+<BaseLayout
+  title="Page not found – Arvid Berndtsson"
+  description="The page you're looking for doesn't exist."
+  noindex
+>
+  <div class="bg-background">
+    <section class="py-20 sm:py-28" aria-labelledby="not-found-heading">
+      <ContentContainer>
+        <div class="mx-auto max-w-xl text-center">
+          <h1 id="not-found-heading" class="text-4xl sm:text-5xl font-bold tracking-tight text-foreground mb-4">
+            Page not found
+          </h1>
+          <p class="text-lg text-muted-foreground mb-8">
+            The page you're looking for doesn't exist or has been moved.
+          </p>
+          <nav aria-label="404 recovery">
+            <a
+              href="/"
+              class="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-md hover:bg-primary/90 transition-colors"
+            >
+              Back to home
+            </a>
+          </nav>
+        </div>
+      </ContentContainer>
+    </section>
+  </div>
+</BaseLayout>

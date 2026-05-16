@@ -1,0 +1,30 @@
+# Prevent Prettier from touching pnpm-specific and generated files
+
+# —————————————————————
+
+# pnpm lockfile (large YAML; formatting churns the diff)
+
+pnpm-lock.yaml
+
+# Cloudflare Pages' Wrangler config reader rejects JSONC trailing commas.
+
+wrangler.jsonc
+
+#pnpm debug logs
+
+.pnpm-debug.log*
+
+# Local pnpm store (if you opted in to store packages inside the repo)
+
+.pnpm/
+.pnpm/**
+.pnpm-store/
+.pnpm-store/**
+
+# Node, build and cache directories
+
+node_modules/
+dist/
+.astro/
+build/
+temp/

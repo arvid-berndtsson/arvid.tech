@@ -1,0 +1,135 @@
+---
+title: "Chess MCP"
+summary: "A chess engine and MCP game server for AI-assisted play, analysis, and integrations."
+category: "other"
+tags: [typescript, mcp, ai, cli, backend]
+status: "active"
+language: "TypeScript"
+repoUrl: "https://github.com/arvid-berndtsson/Chess-MCP"
+docsUrl: "https://github.com/arvid-berndtsson/Chess-MCP#readme"
+publishedDate: 2025-07-01
+updatedDate: 2025-07-01
+coverImageAlt: "A black rook with a blue-gray background behind it."
+coverImage: "projects/chess-mcp/og-image.png"
+problem: "LLM assistants can discuss chess, but without tool connectivity they cannot enforce game rules or maintain board state."
+whatItDoes:
+  - "Implements a playable chess engine with CLI and MCP server modes."
+  - "Exposes chess actions for natural-language assistant workflows."
+  - "Includes multi-level AI analysis and gameplay support."
+useCases:
+  - "MCP learning and demos for tool-enabled assistants."
+  - "CLI-based chess play with AI difficulty levels."
+  - "Embedding chess functionality in AI applications."
+stackArchitecture:
+  - "TypeScript core modules and MCP server interface."
+  - "CLI layer for local play and analysis."
+  - "Automated tests for move legality and engine behavior."
+roadmap:
+  - "Expand engine strength and search optimizations."
+  - "Add richer telemetry and position export."
+  - "Improve integration docs for assistant clients."
+relatedResearch: [why-many-ai-companies-are-just-wrappers-and-what-it-means-for-innovation]
+---
+
+So my dad asked me, "What is an MCP and how does it actually work?" I tried to explain what it was by comparing it to APIs for Large Language Models (since he knows what an API is). But he wanted me to show him a simple version of one and how it works a bit more behind the scenes, so I built this simple Chess MCP.
+
+## The Problem: AI That Can Talk About Chess But Can't Actually Play
+
+Here's the thing, modern AI assistants are pretty amazing at conversation. They can chat about chess strategy, explain the rules, and even suggest moves that sound reasonable. But there's a catch: they're basically just really good actors pretending to know chess.
+
+Think about it like this: you could have a brilliant conversation with someone about how to drive a car, but that doesn't mean they can actually get behind the wheel and drive you somewhere. The AI can talk the talk, but it can't walk the walk when it comes to actually playing chess.
+
+It doesn't understand board state, can't enforce the rules, and might suggest moves that are completely illegal.
+
+## The Solution: MCP as a Bridge
+
+This is where the Model Context Protocol (MCP) comes in. Think of it as a universal translator that lets your AI assistant talk to specialized tools that actually know how to do things.
+
+In our case, it's like giving your AI assistant a direct line to a chess engine that actually knows how to play. The AI handles the conversation and natural language understanding, while the chess engine does all the heavy lifting of actually playing the game.
+
+Here's how it works in practice:
+
+1. **You talk to the AI** - "Move my knight from g1 to f3"
+2. **The AI translates** - It converts your request into a command the chess engine understands
+3. **The engine executes** - It makes the move, validates it, and updates the game state
+4. **The AI reports back** - It tells you what happened in plain English
+
+It's a perfect partnership - you get the conversational interface you want, and the chess engine handles all the complex logic behind the scenes.
+
+## Two Ways to Play: Pick Your Poison
+
+I built this project to be flexible, so you can use it however you prefer.
+
+### Option 1: The Classic Terminal Experience
+
+If you want to just play chess without all the AI assistant stuff, you can run it directly in your terminal. It's clean, fast, and gives you everything you need for a good game.
+
+```bash
+npm run cli
+```
+
+Once you're in, you've got a full chess toolkit. You can:
+
+- Play human vs human (classic)
+- Challenge the AI at different skill levels (1-5, from beginner to master)
+- Watch two AIs battle it out (surprisingly entertaining)
+- Use either chess notation (Nf3) or coordinates (g1f3) for moves
+
+The analysis tools are pretty handy too:
+
+- `board` - Shows you the current position with nice Unicode pieces
+- `all-moves` - Lists every legal move available
+- `analyze` - Gives you the engine's evaluation and best moves
+- `undo` - Take back your last move (because we all make mistakes)
+
+### Option 2: The AI Assistant Integration
+
+This is where it gets really cool. Once you've got the MCP server running and connected to your AI assistant (like Raycast), you can control the entire game with natural language.
+
+The conversation flows naturally:
+
+- "Start a new game against the AI at level 3"
+- "Move my pawn to e4"
+- "Show me the board"
+- "What's the best move here?"
+
+The AI handles all the translation between your requests and the chess engine, so you can focus on playing rather than remembering commands.
+
+## How the AI Actually Thinks
+
+I put a lot of work into making the AI opponent actually challenging and interesting to play against. Each skill level uses progressively more sophisticated algorithms.
+
+**Level 1 (Beginner):** Smart random moves. It picks from legal moves but avoids obvious blunders like moving into check. Perfect for learning the rules.
+
+**Level 2 (Intermediate):** Positional evaluation. It looks at the current board and picks moves that improve its position, but doesn't plan ahead.
+
+**Level 3 (Advanced):** Basic lookahead. Now it's thinking 3-4 moves ahead using the minimax algorithm. It can spot simple tactics and avoid obvious traps.
+
+**Level 4 (Expert):** Optimized searching. Same minimax but with alpha-beta pruning - a clever trick that lets it ignore obviously bad lines without fully analyzing them. This means it can think deeper and faster.
+
+**Level 5 (Master):** Deep calculation. Combines all the previous techniques with move ordering and iterative deepening. It's genuinely challenging and will punish mistakes.
+
+I also added some performance optimizations like transposition tables (basically a memory cache for positions it's already analyzed) which gives a nice 2-5x speed boost in common situations.
+
+## Building Something That Actually Works
+
+I'm a big believer that code should be reliable and maintainable. This project follows a clean, modular architecture that makes it easy to understand and extend.
+
+The main components are:
+
+- **ChessEngine** - Core game logic (powered by the battle-tested chess.js library)
+- **SmartChessAI** - All the AI algorithms and move selection
+- **ChessMCPServer** - The MCP communication layer
+- **InteractiveCLI** - The terminal interface
+
+I've also got a comprehensive test suite that runs automatically on every change. This was crucial during development - I had an early bug where the AI would occasionally try to make illegal moves. The tests caught this and now the AI validates every move against the engine before playing it.
+
+## Getting Started
+
+The whole point of this project was to make MCP tangible and understandable. You can check it out on [GitHub](https://github.com/arvid-berndtsson/Chess-MCP).
+
+To play, just clone it, run `npm install`, and then `npm run cli` to jump into a game.
+
+For developers who want to dive deeper, the code is designed to be a learning resource. There's documentation covering the API, architecture, and AI implementation. Contributions are always welcome, whether it's improving the AI, adding features, or fixing bugs.
+
+What started as a way to explain MCP to my dad has turned into a pretty solid chess engine that shows how AI assistants can be made much more powerful by giving them access to specialized tools. It's a glimpse into how we'll build intelligent applications in the future - not by making one giant AI that knows everything, but by creating a network of specialized tools that can work together seamlessly.

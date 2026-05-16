@@ -1,0 +1,140 @@
+---
+title: "Robots.txt Analyzer"
+summary: "Modern robots.txt analyzer with instant parsing, security checks, and best-practice scoring."
+category: "offensive-security"
+tags: [qwik, typescript, cloudflare, d1, tailwind, seo]
+status: "maintained"
+language: "TypeScript"
+repoUrl: "https://github.com/arvid-berndtsson/robots-txt-analyzer"
+docsUrl: "https://github.com/arvid-berndtsson/robots-txt-analyzer#readme"
+demoUrl: "https://robots-txt.arvid.tech"
+publishedDate: 2025-01-01
+updatedDate: 2025-01-01
+coverImage: "projects/robots-txt-analyzer/og-image.png"
+coverImageAlt: "Robots.txt Analyzer UI"
+featured: true
+problem: "robots.txt mistakes can leak sensitive paths and break crawl behavior, but teams often lack quick, practical validation tooling."
+whatItDoes:
+  - "Parses robots.txt directives and highlights syntax or logic issues."
+  - "Scores configurations against practical SEO and security heuristics."
+  - "Provides recommendations and export options for follow-up work."
+useCases:
+  - "Security/SEO sanity checks before production releases."
+  - "Technical audits for client websites."
+  - "Developer self-service checks during debugging."
+stackArchitecture:
+  - "Qwik frontend with TypeScript."
+  - "Cloudflare Pages functions for analysis endpoints."
+  - "Cloudflare D1 + Worker cron for data lifecycle tasks."
+roadmap:
+  - "Add richer policy presets for common frameworks."
+  - "Improve historical comparison views."
+  - "Extend analyzer checks for crawler edge cases."
+relatedResearch: [a-practical-guide-to-preventing-subdomain-hijacking]
+---
+
+Robots.txt Analyzer is a powerful web tool designed to help webmasters and SEO professionals analyze, validate, and optimize their robots.txt files. Built with modern web technologies and deployed on Cloudflare's global network, this tool provides instant analysis and actionable recommendations to improve your site's crawler directives.
+
+## What is Robots.txt Analyzer?
+
+I developed this tool to address a common challenge in web development and SEO: properly configuring robots.txt files to control how search engines and other web crawlers interact with your site. While robots.txt files appear simple on the surface, they can have significant implications for your site's visibility, security, and performance. The analyzer provides a comprehensive scoring system, security recommendations, and detailed insights into your robots.txt configuration, all presented in a clean, intuitive interface that works seamlessly across devices.
+
+## The Technology Stack
+
+Robots.txt Analyzer is built with a modern, performance-focused technology stack:
+
+- **Qwik**: A revolutionary web framework that delivers near-instant loading times through resumability rather than hydration, providing an exceptional user experience
+- **TypeScript**: Adds strong typing to JavaScript, enhancing code quality and developer experience
+- **Cloudflare Pages**: Hosts the application with global distribution for low-latency access worldwide
+- **Cloudflare D1**: A serverless SQL database that stores analysis history and caches results
+- **Tailwind CSS**: Provides utility-first styling for a responsive, clean interface
+- **Umami Analytics**: A self-hosted, privacy-focused analytics solution to track usage patterns while respecting user privacy
+
+This architecture ensures the application is fast, reliable, and scalable, with minimal operational overhead.
+
+## Under the Hood: How the Parser Works
+
+The heart of Robots.txt Analyzer is its sophisticated parsing and analysis engine.
+
+### 1. Parsing the Robots.txt File
+
+The parser begins by breaking down the robots.txt file into its component parts, handling all standard robots.txt directives:
+
+- **User-agent**: Specifies which crawler the rules apply to
+- **Disallow**: Paths that should not be crawled
+- **Allow**: Exceptions to disallow rules
+- **Crawl-delay**: Suggested pause between crawler requests
+- **Sitemap**: URLs to XML sitemaps
+
+### 2. Web Application Detection
+
+One of the analyzer's unique features is its ability to detect common web applications and frameworks based on patterns in the robots.txt file. The analyzer recognizes patterns for popular platforms like WordPress, Drupal, Joomla, Magento, Shopify, and more. This allows it to provide platform-specific recommendations.
+
+### 3. Security Analysis
+
+The analyzer identifies potentially sensitive paths that should be protected from crawlers by checking paths against robots.txt rules. The analyzer can identify security vulnerabilities where sensitive areas of your site might be exposed to search engines and potentially malicious crawlers.
+
+### 4. Comprehensive Scoring
+
+The analyzer evaluates your robots.txt file against best practices and assigns a score. The score reflects how well your robots.txt file follows best practices, with deductions for issues like missing global rules, unprotected sensitive paths, or platform-specific concerns.
+
+## The API Layer
+
+The analyzer implements a RESTful API that handles the analysis process directly within the Cloudflare Pages functions. The API includes intelligent caching to improve performance and reduce load on target websites. Results are cached for 60 seconds to prevent unnecessary repeated analyses.
+
+## Maintenance and Cleanup
+
+A simple Cloudflare Worker runs as a cron job to clean up old entries in the database. This automated maintenance helps keep the application running smoothly without manual intervention, ensuring that the database doesn't grow unnecessarily large with outdated analysis results.
+
+## User Experience Features
+
+The analyzer includes several features to enhance the user experience:
+
+- **Instant Analysis**: Enter a URL and get immediate feedback on your robots.txt file
+- **Detailed Recommendations**: Actionable suggestions to improve your configuration
+- **Export Options**: Download results in JSON or CSV format for further analysis or reporting
+- **History Tracking**: View past analyses to track changes over time
+- **Mobile-Friendly Design**: Works seamlessly on all devices
+- **Privacy-Focused Analytics**: Uses self-hosted Umami analytics to respect user privacy while gathering usage insights
+
+## Real-World Applications
+
+Robots.txt Analyzer serves several practical purposes:
+
+### SEO Optimization
+
+By ensuring your robots.txt file correctly allows search engines to access important content while blocking unnecessary areas, you can improve your site's search visibility.
+
+### Security Enhancement
+
+The analyzer identifies potential security risks where sensitive areas of your site might be exposed to crawlers, helping you protect administrative interfaces, login pages, and private content.
+
+### Technical Debugging
+
+When crawling issues occur, the analyzer helps diagnose problems with your robots.txt configuration that might be preventing proper indexing.
+
+### Platform-Specific Guidance
+
+For sites running on common platforms like WordPress, Drupal, or e-commerce systems, the analyzer provides tailored recommendations based on the specific requirements of those platforms.
+
+## Behind the Scenes: Cloudflare Integration
+
+The analyzer leverages several Cloudflare technologies:
+
+- **Cloudflare Pages** hosts the application with integrated serverless functions
+- **Cloudflare D1** stores analysis history and caches results
+- **Cloudflare KV** manages user history and preferences
+- **Cloudflare Workers** powers a small cron job for database maintenance
+
+This serverless architecture ensures the application is fast, reliable, and scalable, with minimal operational overhead.
+
+## Looking Forward
+
+The Robots.txt Analyzer started as a weekend project to solve a specific problem and grew into something more useful. It's a practical example of how specialized tools can simplify technical tasks that are often overlooked but still important.
+
+The project combines modern web frameworks with serverless architecture to deliver a fast, responsive experience without the overhead of traditional hosting. Self-hosted Umami analytics provides usage insights while respecting visitor privacy.
+
+## Links
+
+- Website: [robots-txt.arvid.tech](https://robots-txt.arvid.tech)
+- Source: [GitHub](https://github.com/arvid-berndtsson/robots-txt-analyzer)

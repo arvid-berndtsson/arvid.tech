@@ -1,0 +1,51 @@
+name: Content Checks
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "content/**"
+      - "public/**"
+      - "src/content.config.ts"
+      - "scripts/check-content-quality.ts"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - ".github/workflows/content-checks.yml"
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "content/**"
+      - "public/**"
+      - "src/content.config.ts"
+      - "scripts/check-content-quality.ts"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - ".github/workflows/content-checks.yml"
+  workflow_dispatch:
+
+jobs:
+  content-checks:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: latest
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Run content checks
+        run: pnpm content:check

@@ -1,0 +1,525 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+/* Use .dark class for dark mode so theme toggle and system preference (on first load) both work */
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --background: #fafafa;
+  --foreground: #0a0a0a;
+  /* shadcn/ui variables */
+  /* Primary: darkened for WCAG 2 AA contrast (4.5:1) with white text */
+  --primary: 24 100% 32%;
+  --primary-foreground: 0 0% 100%;
+  --muted: 0 0% 96%;
+  --muted-foreground: 0 0% 25%;
+  --border: 0 0% 94%;
+  --input: 0 0% 90%;
+  --ring: 24 100% 32%;
+  --radius: 0.75rem;
+  --card: #ffffff;
+  --card-foreground: #0a0a0a;
+  --accent: 0 0% 96%;
+  --accent-foreground: 0 0% 9%;
+  color-scheme: light;
+  /* Pagefind search UI – matches site theme (amber) */
+  --pagefind-ui-scale: 1;
+  --pagefind-ui-primary: hsl(38 92% 50%);
+  --pagefind-ui-text: var(--foreground);
+  --pagefind-ui-background: var(--background);
+  --pagefind-ui-border: hsl(var(--border));
+  --pagefind-ui-tag: hsl(var(--muted));
+  --pagefind-ui-border-radius: var(--radius);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+/* Dark mode: dark grey surfaces (not pure black) for WCAG and 2026 trends */
+.dark {
+  --background: #111111;
+  --foreground: #ededed;
+  --primary: 24 100% 48%;
+  --primary-foreground: 0 0% 100%;
+  --muted: 0 0% 15%;
+  --muted-foreground: 0 0% 65%;
+  --border: 0 0% 24%;
+  --input: 0 0% 18%;
+  --ring: 24 100% 48%;
+  --card: #181818;
+  --card-foreground: #ededed;
+  --accent: 0 0% 15%;
+  --accent-foreground: 0 0% 98%;
+  color-scheme: dark;
+  /* Pagefind search UI – dark theme (amber) */
+  --pagefind-ui-primary: hsl(38 92% 55%);
+  --pagefind-ui-text: var(--foreground);
+  --pagefind-ui-background: var(--background);
+  --pagefind-ui-border: hsl(var(--border));
+  --pagefind-ui-tag: hsl(var(--muted));
+}
+
+/* Search modal: make results scrollable (overrides Pagefind default layout) */
+#pagefind-search-modal .pagefind-ui {
+  display: flex !important;
+  flex-direction: column !important;
+  flex: 1 1 0% !important;
+  min-height: 0 !important;
+  height: 100% !important;
+}
+#pagefind-search-modal .pagefind-ui__form {
+  flex-shrink: 0 !important;
+}
+/* Drawer: column so results-area can be the scroll container */
+#pagefind-search-modal .pagefind-ui__drawer {
+  display: flex !important;
+  flex-direction: column !important;
+  flex: 1 1 0% !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+  flex-wrap: nowrap !important;
+}
+#pagefind-search-modal .pagefind-ui__results-area {
+  flex: 1 1 0% !important;
+  min-height: 0 !important;
+  max-height: 60vh !important; /* fallback so results always scroll */
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  -webkit-overflow-scrolling: touch;
+}
+/* Tighter spacing above and below each result */
+#pagefind-search-modal .pagefind-ui__result {
+  padding-top: 0.5rem !important;
+  padding-bottom: 0.75rem !important;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 dark:bg-gray-700 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-400 dark:bg-gray-600;
+}
+
+/* Accessible focus styles (WCAG compliant) */
+/* Scope to interactive controls to avoid overriding component-specific focus styles */
+:where(
+  a,
+  button,
+  input,
+  textarea,
+  select,
+  summary,
+  [role="button"],
+  [tabindex]:not([tabindex="-1"])
+):focus-visible {
+  @apply outline-none ring-2 ring-amber-600 ring-offset-2 ring-offset-white dark:ring-offset-[#111111];
+}
+
+/* Suppress mouse focus styles only for interactive controls (keep keyboard focus visible) */
+:where(
+    a,
+    button,
+    input,
+    textarea,
+    select,
+    summary,
+    [role="button"],
+    [tabindex]:not([tabindex="-1"])
+  ):focus:not(:focus-visible) {
+  outline: none;
+  box-shadow: none;
+}
+
+/* Prose: list markers visible in dark mode (WCAG AA contrast) */
+.dark .prose ul li::marker,
+.dark .prose ol li::marker {
+  color: var(--foreground);
+  opacity: 0.85;
+}
+
+/* Shiki code blocks: dual theme (Astro default .astro-code) */
+.dark .astro-code,
+.dark .astro-code span {
+  color: var(--shiki-dark) !important;
+  background-color: var(--shiki-dark-bg) !important;
+  font-style: var(--shiki-dark-font-style) !important;
+  font-weight: var(--shiki-dark-font-weight) !important;
+  text-decoration: var(--shiki-dark-text-decoration) !important;
+}
+
+/* Enhanced typography */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.035em;
+}
+
+/* Headings anchor icon on hover (CSS-only) */
+.prose :is(h1, h2, h3, h4, h5, h6) a {
+  text-decoration: none;
+  position: relative;
+}
+
+.prose :is(h1, h2, h3, h4, h5, h6):hover a::after {
+  content: "#";
+  position: absolute;
+  margin-left: 0.5rem;
+  color: rgb(107 114 128); /* gray-500, WCAG AA on light background */
+  font-size: 0.875rem; /* text-sm */
+}
+
+.dark .prose :is(h1, h2, h3, h4, h5, h6):hover a::after {
+  color: rgb(209 213 219); /* gray-300, WCAG AA on dark background */
+}
+
+/* Tighter body text in MDX (override Typography defaults) */
+.prose p {
+  line-height: 1.3;
+}
+
+/* Gradient text effect - darker amber for light mode (WCAG AA), current for dark */
+.gradient-text {
+  background: linear-gradient(135deg, #92400e 0%, #b45309 50%, #92400e 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.dark .gradient-text {
+  background: linear-gradient(135deg, #b45309 0%, #d97706 50%, #b45309 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Glass morphism effect - navbar and cards */
+.glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.dark .glass {
+  background: rgba(12, 12, 12, 0.8);
+  border-color: rgba(255, 255, 255, 0.06);
+}
+
+/* ── Staggered reveal animations (CSS-only kinetic typography) ── */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  33% {
+    transform: translateY(-8px) rotate(1deg);
+  }
+  66% {
+    transform: translateY(4px) rotate(-1deg);
+  }
+}
+
+@keyframes pulse-glow {
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* Decorative motion: only when user has not requested reduced motion (2026 trend #3) */
+@media (prefers-reduced-motion: no-preference) {
+  .animate-fade-in-up {
+    animation: fadeInUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.6s ease-out both;
+  }
+
+  .animate-slide-in-left {
+    animation: slideInLeft 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .animate-scale-in {
+    animation: scaleIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .stagger-1 {
+    animation-delay: 0.1s;
+  }
+  .stagger-2 {
+    animation-delay: 0.2s;
+  }
+  .stagger-3 {
+    animation-delay: 0.3s;
+  }
+  .stagger-4 {
+    animation-delay: 0.4s;
+  }
+  .stagger-5 {
+    animation-delay: 0.5s;
+  }
+
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .animate-pulse-glow {
+    animation: pulse-glow 4s ease-in-out infinite;
+  }
+}
+
+/* Testimonial cards: explicit border color so the line is visible in light mode (Tailwind border-gray-* can be missing or overridden in v4 @theme-only setup) */
+.testimonial-card {
+  border-color: #9ca3af; /* gray-400 on light */
+}
+.dark .testimonial-card {
+  border-color: hsl(var(--border));
+}
+
+/* Testimonial decorative quote: visible in light mode, subtle in dark */
+.testimonial-quote {
+  color: #b45309; /* amber-700, visible on light card */
+}
+.dark .testimonial-quote {
+  color: rgb(245 158 11 / 0.25); /* amber-500 at 25% */
+}
+
+/* Micro-interaction: hover shadow gives feedback that card is interactive (2026 trend #3) */
+.card-interactive {
+  transition:
+    box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.2s ease;
+}
+
+.card-interactive:hover {
+  box-shadow:
+    0 12px 40px -12px rgba(180, 83, 9, 0.12),
+    0 4px 16px -4px rgba(0, 0, 0, 0.08);
+}
+
+.dark .card-interactive:hover {
+  box-shadow:
+    0 12px 40px -12px rgba(217, 119, 6, 0.15),
+    0 4px 16px -4px rgba(0, 0, 0, 0.35);
+}
+
+/* ── Card summary: min 2–3 lines so text is always visible; expand to 4–5 when there's room ── */
+/* text-sm + leading-relaxed ≈ 1.42rem per line */
+.card-summary-container {
+  container-type: size;
+  container-name: card-summary;
+  min-height: 4.25rem; /* ~3 lines minimum so summary never collapses to zero */
+}
+
+.card-summary-text {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  -webkit-line-clamp: 3;
+  min-height: 4.25rem; /* reserve space for at least 3 lines */
+}
+
+@container card-summary (min-height: 5rem) {
+  .card-summary-text:not(.card-summary-text--max-2) {
+    -webkit-line-clamp: 4;
+  }
+}
+
+@container card-summary (min-height: 6.5rem) {
+  .card-summary-text:not(.card-summary-text--max-2) {
+    -webkit-line-clamp: 5;
+  }
+}
+
+/* Thought cards (no footer) often have more room – allow 6–7 lines when space allows */
+@container card-summary (min-height: 8rem) {
+  .card-summary-text:not(.card-summary-text--max-2) {
+    -webkit-line-clamp: 6;
+  }
+}
+
+@container card-summary (min-height: 9.5rem) {
+  .card-summary-text:not(.card-summary-text--max-2) {
+    -webkit-line-clamp: 7;
+  }
+}
+
+.card-summary-text--max-2 {
+  -webkit-line-clamp: 2;
+  min-height: 2.85rem; /* reserve space for at least 2 lines */
+}
+
+/* ── Organic section dividers ── */
+.section-curve-top {
+  position: relative;
+}
+
+.section-curve-top::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: 0;
+  right: 0;
+  height: 48px;
+  background: inherit;
+  clip-path: ellipse(55% 100% at 50% 100%);
+  z-index: 1;
+}
+
+.section-curve-bottom::after {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 48px;
+  background: inherit;
+  clip-path: ellipse(55% 100% at 50% 0%);
+  z-index: 1;
+}
+
+/* ── Nav link underline animation ── */
+.nav-link {
+  position: relative;
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #b45309, #d97706);
+  border-radius: 1px;
+  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+/* ── Hover effects ── */
+.hover-lift {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+}
+
+/* Custom selection color - darker amber theme */
+::selection {
+  @apply bg-amber-600 text-white;
+}
+
+::-moz-selection {
+  @apply bg-amber-600 text-white;
+}
+
+/* ── Respect reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-delay: 0s !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-delay: 0s !important;
+    transition-duration: 0.01ms !important;
+  }
+}

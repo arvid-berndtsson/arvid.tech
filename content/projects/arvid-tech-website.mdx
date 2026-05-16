@@ -1,0 +1,119 @@
+---
+title: "arvid.tech - Personal Website"
+summary: "A long-running personal website that started in iWeb at age 7 and evolved through WordPress, HTML/jQuery, React, Next.js, Svelte, Qwik, Ghost, and now Astro."
+category: "other"
+tags: [astro, typescript, cloudflare, tailwind, wordpress, nextjs, svelte, qwik, ghost]
+status: "active"
+language: "TypeScript"
+repoUrl: "https://github.com/arvidberndtsson/arvid.tech"
+docsUrl: "https://github.com/arvidberndtsson/arvid.tech#readme"
+publishedDate: 2025-01-15
+updatedDate: 2026-02-16
+coverImage: "/placeholder-image.png"
+coverImageAlt: "Screenshot of the arvid.tech website showing the homepage"
+featured: true
+problem: "A personal site should be easy to update, fast globally, and flexible enough to evolve as my stack and goals change."
+whatItDoes:
+  - "Publishes projects, writing, experience, and references in one place."
+  - "Tracks a long iteration history across multiple frameworks and CMS platforms."
+  - "Uses a typed content workflow with fast edge delivery on Cloudflare."
+useCases:
+  - "Publishing technical posts and project updates quickly."
+  - "Testing framework and architecture decisions in a real production site."
+  - "Maintaining a portfolio with good performance and clear information architecture."
+stackArchitecture:
+  - "Astro + MDX content collections for content modeling and static-first rendering."
+  - "TypeScript + Tailwind CSS with selective React islands."
+  - "Cloudflare Pages hosting and edge delivery."
+roadmap:
+  - "Keep refining content architecture and internal linking."
+  - "Continue performance and accessibility hardening."
+  - "Document migration decisions and tradeoffs as part of the project history."
+relatedResearch: [where-should-i-host-my-portfolio]
+---
+
+I built my first website when I was around six or seven years old, using Apple's iWeb. It was the kind of site only a kid could love: simple, weird, and constantly changing. But it gave me something that still matters to me now: a place on the internet that felt like mine.
+
+## The Beginning
+
+Very early on, the site lived under `avve.se`. iWeb was fun for a while, but limited. When I got bored with what the builder allowed, I drifted into other programming projects instead of polishing the site.
+
+I spent a lot of time with Lua and Java scripts, especially for Minecraft and Garry's Mod communities. Most of that work was shared in small circles and game servers, not as polished web apps, but it shaped how I think about building things: make it useful first, then clean it up later.
+
+## WordPress, Learning, And Publishing
+
+Around age nine or ten, WordPress became the main platform. I had already played with it before, but this was when I actually started using it seriously. It was cheap or free to host in many places, easy to get started with, and it let me publish fast.
+
+Back then, PHP felt approachable. I would not phrase it that way today, but at the time it was enough to get things done. I had mostly worked with Java, and WordPress was a practical bridge into running a real public site.
+
+This is also where the site became many different things depending on the year:
+
+- A personal blog
+- A League of Legends team website for me and my friends
+- A Minecraft server site
+- A place for security and password-management articles
+
+## From Static Code To Modern Frameworks
+
+There was a long phase where I ran things with plain HTML, CSS, JavaScript, and jQuery. That phase taught me fundamentals, but it also taught me why frameworks exist. At some point, manually wiring everything stops being educational and starts being friction.
+
+When React started taking off, I moved in that direction. Later, the site went through repeated rebuilds as I explored different tools and priorities.
+
+The rough path looked like this:
+
+WordPress -> HTML/jQuery -> React -> Next.js -> Svelte -> Qwik -> Ghost -> Next.js -> Astro.
+
+## Domains, Naming, And Identity
+
+As the project matured, the domain kept changing too. After `avve.se`, I moved to `arvidberndtsson.com` to make the site feel more serious and personal.
+
+Later I wanted something shorter, so I tried `dotarvid.com` for a short period. It worked, but the name never felt right. After about nine months, I switched to `arvid.tech`, which finally felt like the right balance between identity and clarity.
+
+## The Rebuild Cycle And What Triggered It
+
+Each migration had a different trigger, but most came down to one of three reasons: I wanted more control, I wanted better performance, or I wanted a smoother writing workflow.
+
+I moved off WordPress because, for the way I work now, it became frustrating. It solved publishing, but got in the way of building. The non-CMS phases were mostly driven by wanting to program directly and control every detail.
+
+Svelte and Qwik were part curiosity and part performance experimentation. Qwik was probably the fastest setup I had from a runtime perspective. But I eventually got bored of optimizing for performance alone and wanted to focus on broader product and content decisions again.
+
+## The Ghost Era
+
+Ghost was the best writing experience I had. It removed a lot of operational noise and made publishing feel effortless again. That period was fun because I could focus on ideas instead of plumbing.
+
+The downside was ownership and workflow fit. My preferred workflow is file-based content in Git (MD/MDX), versioned with the rest of the code. With Ghost, content lived in the CMS and database. That mismatch eventually became the reason I left, even though the editor itself was excellent.
+
+## Back To Next.js, Then Astro
+
+After Ghost, I moved back to Next.js to regain full control. That helped, but the content pipeline still felt clunky for my use case. I used Contentlayer for MDX-driven pages, and it worked, but it never felt great to maintain.
+
+The move to Astro happened in January 2026, during winter holiday, and the first migration took around three days. I had planned it for a while already. Cloudflare's Astro momentum was the final push that made me do it that weekend instead of later.
+
+Today the site runs on Astro 5, TypeScript, Tailwind CSS, MDX collections, and selective React islands on Cloudflare Pages. It is still evolving. For example, as of writing this, there are still details I want to fix, including putting my photo back on the landing page.
+
+## What Broke Along The Way
+
+The biggest loss was a WordPress instance around 2017 where the database got corrupted. I was worse at hosting back then, and some content from that period is simply gone.
+
+The two heaviest migrations were:
+
+- WordPress to pure HTML/CSS/JS, because everything had to be rebuilt manually
+- Ghost to Next.js, because content exports were awkward to transform into a clean, versioned structure
+
+Those migrations were painful, but they made one thing obvious: portability matters more than convenience when you plan to keep a site for years.
+
+## What The Site Is For Now
+
+In recent years, this site has mostly acted as a portfolio and project log. But writing is still the core reason it exists. I mostly write to get ideas out of my head. If someone learns something from it, that is a bonus.
+
+At the same time, the tone has changed. Earlier versions felt freer and more raw. Now I sometimes feel pressure to sound more business-professional. I am trying to keep both: practical writing that is still personal enough to feel honest.
+
+## Lessons So Far
+
+1. Choose tooling based on your current goal, not on hype.
+2. If you want to learn deeply, own the stack and build it yourself.
+3. If you mostly want to write, use a CMS that removes friction.
+4. Keep content in portable formats you control.
+5. Rebuild only when it solves a real pain, not just because a new tool looks fun.
+
+This website has changed names, stacks, and purpose many times. The one constant is that it keeps adapting to who I am and what I care about at that moment.

@@ -1,0 +1,244 @@
+name: Unicode Character Check
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  unicode-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "24"
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: latest
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Check for invisible Unicode characters
+        run: |
+          # Create a script to check for invisible Unicode characters
+          cat > check-unicode.js << 'EOF'
+          const fs = require('fs');
+          const path = require('path');
+
+          // Define invisible Unicode characters to check for
+          const invisibleChars = [
+            { name: 'Word Joiner', code: '\u2060', hex: 'U+2060' },
+            { name: 'Zero Width Non-Joiner', code: '\u200C', hex: 'U+200C' },
+            { name: 'Zero Width Joiner', code: '\u200D', hex: 'U+200D' },
+            { name: 'Zero Width Space', code: '\u200B', hex: 'U+200B' },
+            { name: 'Zero Width No-Break Space', code: '\uFEFF', hex: 'U+FEFF' },
+            { name: 'Left-to-Right Mark', code: '\u200E', hex: 'U+200E' },
+            { name: 'Right-to-Left Mark', code: '\u200F', hex: 'U+200F' },
+            { name: 'Soft Hyphen', code: '\u00AD', hex: 'U+00AD' },
+            { name: 'Narrow No-Break Space', code: '\u202F', hex: 'U+202F' },
+            { name: 'Medium Mathematical Space', code: '\u205F', hex: 'U+205F' },
+            { name: 'Ideographic Space', code: '\u3000', hex: 'U+3000' },
+            { name: 'Hair Space', code: '\u200A', hex: 'U+200A' },
+            { name: 'Thin Space', code: '\u2009', hex: 'U+2009' },
+            { name: 'Punctuation Space', code: '\u2008', hex: 'U+2008' },
+            { name: 'Six-Per-Em Space', code: '\u2006', hex: 'U+2006' },
+            { name: 'Four-Per-Em Space', code: '\u2005', hex: 'U+2005' },
+            { name: 'Three-Per-Em Space', code: '\u2004', hex: 'U+2004' },
+            { name: 'Figure Space', code: '\u2007', hex: 'U+2007' },
+            { name: 'En Quad', code: '\u2000', hex: 'U+2000' },
+            { name: 'Em Quad', code: '\u2001', hex: 'U+2001' },
+            { name: 'En Space', code: '\u2002', hex: 'U+2002' },
+            { name: 'Em Space', code: '\u2003', hex: 'U+2003' }
+          ];
+
+          // File extensions to check
+          const extensionsToCheck = ['.md', '.mdx', '.ts', '.tsx', '.js', '.jsx', '.json', '.yml', '.yaml', '.toml'];
+
+          // Directories to exclude
+          const excludeDirs = ['node_modules', '.git', '.next', 'dist', 'build', 'coverage'];
+
+          let foundIssues = false;
+          let totalIssues = 0;
+
+          function shouldExcludeDir(dirPath) {
+            return excludeDirs.some(excludeDir => 
+              dirPath.includes(excludeDir) || path.basename(dirPath) === excludeDir
+            );
+          }
+
+          function checkFile(filePath) {
+            try {
+              const content = fs.readFileSync(filePath, 'utf8');
+              const lines = content.split('\n');
+              
+              lines.forEach((line, lineNumber) => {
+                invisibleChars.forEach(char => {
+                  if (line.includes(char.code)) {
+                    const charPos = line.indexOf(char.code);
+                    console.log(`❌ Found ${char.name} (${char.hex}) in ${filePath}:${lineNumber + 1}:${charPos + 1}`);
+                    console.log(`   Content: "${line.replace(/\s/g, '·')}"`);
+                    foundIssues = true;
+                    totalIssues++;
+                  }
+                });
+              });
+            } catch (error) {
+              console.log(`⚠️  Could not read file ${filePath}: ${error.message}`);
+            }
+          }
+
+          function walkDirectory(dir) {
+            if (shouldExcludeDir(dir)) {
+              return;
+            }
+            
+            try {
+              const items = fs.readdirSync(dir);
+              
+              items.forEach(item => {
+                const fullPath = path.join(dir, item);
+                const stat = fs.statSync(fullPath);
+                
+                if (stat.isDirectory()) {
+                  walkDirectory(fullPath);
+                } else if (stat.isFile()) {
+                  const ext = path.extname(item).toLowerCase();
+                  if (extensionsToCheck.includes(ext)) {
+                    checkFile(fullPath);
+                  }
+                }
+              });
+            } catch (error) {
+              console.log(`⚠️  Could not read directory ${dir}: ${error.message}`);
+            }
+          }
+
+          console.log('🔍 Checking for invisible Unicode characters...\n');
+          console.log('Checking the following invisible characters:');
+          invisibleChars.forEach(char => {
+            console.log(`  - ${char.name} (${char.hex})`);
+          });
+          console.log('\nChecking file extensions:', extensionsToCheck.join(', '));
+          console.log('Excluding directories:', excludeDirs.join(', '));
+          console.log('\n' + '='.repeat(60) + '\n');
+
+          walkDirectory('.');
+
+          if (foundIssues) {
+            console.log('\n' + '='.repeat(60));
+            console.log(`❌ Found ${totalIssues} invisible Unicode character(s) in the codebase.`);
+            console.log('Please remove these characters to maintain code quality.');
+            process.exit(1);
+          } else {
+            console.log('\n✅ No invisible Unicode characters found!');
+          }
+          EOF
+
+          # Run the Unicode check
+          node check-unicode.js
+
+      - name: Check for Word Joiner specifically
+        run: |
+          echo "🔍 Specifically checking for Word Joiner (U+2060) character..."
+          if grep -r --text $'\u2060' . \
+            --exclude-dir=node_modules \
+            --exclude-dir=.git \
+            --exclude-dir=.next \
+            --exclude-dir=dist \
+            --exclude-dir=build \
+            --exclude-dir=coverage \
+            --exclude="*.png" \
+            --exclude="*.jpg" \
+            --exclude="*.jpeg" \
+            --exclude="*.gif" \
+            --exclude="*.webp" \
+            --exclude="*.pdf" \
+            --exclude="*.ico" \
+            --exclude="*.svg" \
+            --exclude="*.woff" \
+            --exclude="*.woff2" \
+            --exclude="*.ttf" \
+            --exclude="*.eot" \
+            --exclude="*.otf" \
+            --exclude="*.mp4" \
+            --exclude="*.mp3" \
+            --exclude="*.wav" \
+            --exclude="*.zip" \
+            --exclude="*.tar" \
+            --exclude="*.gz" 2>/dev/null; then
+            echo "❌ Found Word Joiner (U+2060) characters in the codebase!"
+            exit 1
+          else
+            echo "✅ No Word Joiner (U+2060) characters found."
+          fi
+
+      - name: Check for other problematic Unicode characters
+        run: |
+          echo "🔍 Checking for other problematic Unicode characters..."
+
+          # Check for various invisible/zero-width characters
+          PROBLEMATIC_CHARS=(
+            $'\u200C'  # Zero Width Non-Joiner
+            $'\u200D'  # Zero Width Joiner  
+            $'\u200B'  # Zero Width Space
+            $'\uFEFF'  # Zero Width No-Break Space
+            $'\u200E'  # Left-to-Right Mark
+            $'\u200F'  # Right-to-Left Mark
+            $'\u00AD'  # Soft Hyphen
+            $'\u202F'  # Narrow No-Break Space
+            $'\u205F'  # Medium Mathematical Space
+            $'\u3000'  # Ideographic Space
+          )
+
+          FOUND_ISSUES=false
+
+          for char in "${PROBLEMATIC_CHARS[@]}"; do
+            # Use grep with --text to avoid binary file issues, and filter out binary files
+            if grep -r --text "$char" . \
+              --exclude-dir=node_modules \
+              --exclude-dir=.git \
+              --exclude-dir=.next \
+              --exclude-dir=dist \
+              --exclude-dir=build \
+              --exclude-dir=coverage \
+              --exclude="*.png" \
+              --exclude="*.jpg" \
+              --exclude="*.jpeg" \
+              --exclude="*.gif" \
+              --exclude="*.webp" \
+              --exclude="*.pdf" \
+              --exclude="*.ico" \
+              --exclude="*.svg" \
+              --exclude="*.woff" \
+              --exclude="*.woff2" \
+              --exclude="*.ttf" \
+              --exclude="*.eot" \
+              --exclude="*.otf" \
+              --exclude="*.mp4" \
+              --exclude="*.mp3" \
+              --exclude="*.wav" \
+              --exclude="*.zip" \
+              --exclude="*.tar" \
+              --exclude="*.gz" 2>/dev/null; then
+              echo "❌ Found problematic Unicode character in the codebase!"
+              FOUND_ISSUES=true
+            fi
+          done
+
+          if [ "$FOUND_ISSUES" = true ]; then
+            echo "❌ Found problematic Unicode characters in the codebase!"
+            exit 1
+          else
+            echo "✅ No problematic Unicode characters found."
+          fi

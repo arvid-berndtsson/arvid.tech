@@ -1,0 +1,5 @@
+Contact: mailto:security@arvid.tech
+Contact: https://arvid.tech/contact
+Preferred-Languages: en
+Expires: 2030-01-01T00:00:00Z
+Canonical: https://arvid.tech/.well-known/security.txt

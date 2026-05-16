@@ -1,0 +1,51 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ContentContainer from '../components/ContentContainer.astro';
+import ProseContent from '../components/ProseContent.astro';
+import { siteConfig } from '../config/site';
+---
+
+<BaseLayout 
+  title="Terms of Service – Arvid Berndtsson" 
+  description="Terms of service for arvid.tech"
+>
+  <div class="bg-background pt-8 pb-16">
+    <ContentContainer>
+      <header class="mb-10">
+        <h1 class="text-4xl sm:text-5xl font-bold tracking-tight text-foreground mb-4">
+          Terms of Service
+        </h1>
+        <p class="text-sm text-muted-foreground">
+          Last updated: {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+        </p>
+      </header>
+
+      <ProseContent>
+        <h2>Use of Content</h2>
+        <p>
+          All content on this website is provided for informational purposes. You may read and share content, 
+          but please provide attribution when referencing or quoting material from this site.
+        </p>
+
+        <h2>Disclaimer</h2>
+        <p>
+          The information provided on this website is for general informational purposes only. 
+          While I strive to keep the information up-to-date and correct, I make no representations 
+          or warranties of any kind about the completeness, accuracy, reliability, or availability 
+          of the information.
+        </p>
+
+        <h2>External Links</h2>
+        <p>
+          This website may contain links to external sites. I have no control over the content 
+          and nature of these sites and am not responsible for their content.
+        </p>
+
+        <h2>Contact</h2>
+        <p>
+          If you have questions about these terms, please contact me at <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a>.
+        </p>
+      </ProseContent>
+    </ContentContainer>
+  </div>
+</BaseLayout>

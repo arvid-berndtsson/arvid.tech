@@ -1,0 +1,186 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ContentContainer from '../components/ContentContainer.astro';
+import ProseContent from '../components/ProseContent.astro';
+import { getCollection } from 'astro:content';
+import { siteConfig } from '../config/site';
+import { getSkillsByCategory, type Skill } from '../../data/skills';
+
+const educationEntries = await getCollection('education');
+const sortedEducation = educationEntries.sort((a, b) => b.data.startDate.valueOf() - a.data.startDate.valueOf());
+
+const certificationEntries = await getCollection('certifications');
+const sortedCertifications = certificationEntries.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const categoryLabels: Record<Skill['category'], string> = {
+  programming: 'Programming',
+  framework: 'Frameworks & technologies',
+  tool: 'Tools',
+  language: 'Languages',
+  platform: 'Platforms',
+  methodology: 'Methodology & security',
+};
+const categoryOrder: Skill['category'][] = ['methodology', 'programming', 'framework', 'platform', 'tool', 'language'];
+
+const labelClass = 'text-xs font-semibold uppercase tracking-[0.2em] text-amber-800 dark:text-amber-400';
+const sectionTitleClass = 'text-2xl sm:text-3xl font-bold tracking-tight text-foreground mt-12 first:mt-0';
+const metaLabelClass = 'text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground';
+const pillClass = 'rounded-full bg-muted/80 dark:bg-muted/60 px-3 py-1.5 text-xs font-medium text-muted-foreground';
+const linkAccent = 'font-semibold text-amber-800 dark:text-amber-400 hover:text-amber-900 dark:hover:text-amber-300 transition-colors underline underline-offset-2';
+const listItemClass = 'flex flex-col sm:flex-row sm:items-baseline sm:gap-2 py-2 border-b border-border/50 last:border-0';
+---
+
+<BaseLayout
+  title="About – Arvid Berndtsson"
+  description="Information security lead and full-stack developer based in Malmö, Sweden. Background, interests, and security work."
+>
+  <div class="bg-background">
+    <!-- Hero-style section -->
+    <section class="relative overflow-hidden py-20 sm:py-28" aria-labelledby="about-heading">
+      <div class="pointer-events-none absolute inset-0" aria-hidden="true">
+        <div class="absolute -top-24 -right-24 h-80 w-80 rounded-full bg-amber-600/10 dark:bg-amber-600/8 blur-3xl"></div>
+      </div>
+      <ContentContainer>
+        <div class="relative">
+          <p class={`animate-fade-in-up ${labelClass}`}>Background</p>
+          <h1 id="about-heading" class="animate-fade-in-up stagger-1 text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-foreground mt-2">
+            About
+          </h1>
+          <p class="animate-fade-in-up stagger-2 mt-4 text-lg sm:text-xl text-muted-foreground max-w-2xl leading-relaxed">
+            A bit about who I am, what I enjoy building, and why security matters to me.
+          </p>
+        </div>
+      </ContentContainer>
+    </section>
+
+    <!-- Content: narrative-first, no card dumps -->
+    <section class="pb-20 sm:pb-28" aria-label="About content">
+      <ContentContainer>
+        <div class="animate-fade-in-up stagger-3 max-w-3xl [&_.prose_a]:text-amber-700 [&_.prose_a]:dark:text-amber-500 [&_.prose_a]:no-underline [&_.prose_a:hover]:text-amber-600 [&_.prose_a:hover]:dark:text-amber-400 [&_.prose_a]:underline [&_.prose_a]:underline-offset-2 [&_.prose_code]:text-amber-700 [&_.prose_code]:dark:text-amber-500 [&_.prose_code]:bg-muted [&_.prose-blockquote]:border-l-amber-600 [&_.prose-blockquote]:dark:border-l-amber-500">
+          <ProseContent>
+            <p>
+              I'm {siteConfig.name}, an information security lead and full-stack developer based in {siteConfig.location}.
+              I help companies keep data safe and build reliable software.
+            </p>
+
+            <h2 class={sectionTitleClass}>What I do</h2>
+            <p>
+              My focus is ISO 27001, SOC 2, risk management, data loss prevention, incident response, and modern web applications.
+              I work across the full stack — from security architecture to hands-on development.
+            </p>
+            {siteConfig.availability && (
+              <p class="mt-4 text-muted-foreground/90">{siteConfig.availability}</p>
+            )}
+
+            <!-- Background / path: weave education into the story -->
+            {sortedEducation.length > 0 && (
+              <>
+                <h2 class={sectionTitleClass}>Background</h2>
+                <p>
+                  I studied computer science and information architecture at Malmö University, and security engineering at Blekinge Institute of Technology before that.
+                  I keep learning through courses and programs in security, compliance, and startup practice — from ISO 27001 and threat intelligence to accelerators like Minc and Drivhuset.
+                </p>
+                <div class="not-prose mt-6">
+                  <p class={metaLabelClass + ' mb-3'}>Education</p>
+                  <ul class="space-y-0 text-sm" role="list">
+                    {sortedEducation.map((entry) => (
+                      <li class={listItemClass}>
+                        <span class="text-muted-foreground shrink-0">
+                          {entry.data.startDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short' })}
+                          {' – '}
+                          {entry.data.endDate
+                            ? entry.data.endDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short' })
+                            : 'Present'}
+                        </span>
+                        <span class="font-medium text-foreground">{entry.data.degree}</span>
+                        <span class="text-muted-foreground">· {entry.data.institution}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                {sortedCertifications.length > 0 && (
+                  <div class="not-prose mt-8">
+                    <p class={metaLabelClass + ' mb-3'}>Selected courses & programs</p>
+                    <ul class="space-y-0 text-sm" role="list">
+                      {sortedCertifications.slice(0, 12).map((entry) => (
+                        <li class={listItemClass}>
+                          <span class="text-muted-foreground shrink-0">
+                            {entry.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'short' })}
+                          </span>
+                          <span class="font-medium text-foreground">{entry.data.name}</span>
+                          <span class="text-muted-foreground">· {entry.data.issuer}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    {sortedCertifications.length > 12 && (
+                      <p class="text-muted-foreground text-sm mt-3">
+                        Plus {sortedCertifications.length - 12} more — see{' '}
+                        <a href={siteConfig.social.linkedin} target="_blank" rel="noopener noreferrer" class={linkAccent}>LinkedIn</a> for the full list.
+                      </p>
+                    )}
+                  </div>
+                )}
+              </>
+            )}
+
+            <!-- Certifications only if no education (e.g. data changes) -->
+            {sortedEducation.length === 0 && sortedCertifications.length > 0 && (
+              <>
+                <h2 class={sectionTitleClass}>Learning</h2>
+                <p class="text-muted-foreground/90">
+                  I keep learning through courses and programs in security, compliance, and startup practice.
+                </p>
+                <div class="not-prose mt-6">
+                  <ul class="space-y-0 text-sm" role="list">
+                    {sortedCertifications.slice(0, 12).map((entry) => (
+                      <li class={listItemClass}>
+                        <span class="text-muted-foreground shrink-0">
+                          {entry.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'short' })}
+                        </span>
+                        <span class="font-medium text-foreground">{entry.data.name}</span>
+                        <span class="text-muted-foreground">· {entry.data.issuer}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  {sortedCertifications.length > 12 && (
+                    <p class="text-muted-foreground text-sm mt-3">
+                      Plus {sortedCertifications.length - 12} more on{' '}
+                      <a href={siteConfig.social.linkedin} target="_blank" rel="noopener noreferrer" class={linkAccent}>LinkedIn</a>.
+                    </p>
+                  )}
+                </div>
+              </>
+            )}
+
+            <!-- I work with: skills as part of the person -->
+            <h2 class={sectionTitleClass}>I work with</h2>
+            <p class="text-muted-foreground/90 mb-4">
+              A few of the tools, languages, and practices I use day to day.
+            </p>
+            <div class="not-prose flex flex-wrap gap-2">
+              {categoryOrder.flatMap((cat) => {
+                const skills = getSkillsByCategory(cat);
+                return skills.map((s) => <span class={pillClass}>{s.name}</span>);
+              })}
+            </div>
+
+            <!-- Optional: something personal — edit this block to reflect you -->
+            <h2 class={sectionTitleClass}>Beyond work</h2>
+            <p class="text-muted-foreground/90">
+              When I'm not working on security or code, I enjoy reading, exploring Malmö, and the occasional run.
+            </p>
+
+            <h2 class={sectionTitleClass}>Get in touch</h2>
+            <p>
+              You can reach me at{' '}
+              <a href={`mailto:${siteConfig.email}`} class={linkAccent}>{siteConfig.email}</a>, or on{' '}
+              <a href={siteConfig.social.github} target="_blank" rel="noopener noreferrer" class={linkAccent}>GitHub</a>
+              {' '}and{' '}
+              <a href={siteConfig.social.linkedin} target="_blank" rel="noopener noreferrer" class={linkAccent}>LinkedIn</a>.
+            </p>
+          </ProseContent>
+        </div>
+      </ContentContainer>
+    </section>
+  </div>
+</BaseLayout>

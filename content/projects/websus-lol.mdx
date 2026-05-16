@@ -1,0 +1,113 @@
+---
+title: "Websus.lol"
+summary: "A university project that turns web sustainability data into memes."
+category: "other"
+tags: [ai, sustainability, react, cloudflare, hono, openai, memegen]
+status: "archived"
+language: "TypeScript"
+publishedDate: 2024-01-15
+updatedDate: 2024-01-15
+coverImage: "projects/websus-lol/og-image.png"
+coverImageAlt: "Websus.lol cover image. A door with a lock on it."
+problem: "Sustainability metrics are difficult to communicate to broader audiences in an engaging format."
+whatItDoes:
+  - "Converts sustainability scan data into meme-ready prompts."
+  - "Generates text and images through AI and meme APIs."
+  - "Packages results in a shareable web interface."
+useCases:
+  - "University project demonstrations."
+  - "Playful awareness campaigns for web sustainability."
+  - "Experimentation with API orchestration and prompt design."
+stackArchitecture:
+  - "React frontend with Hono API backend."
+  - "Prompt-driven text generation using OpenAI."
+  - "Self-hosted Memegen customization for image output."
+roadmap:
+  - "Archived as a university project."
+  - "No active product roadmap."
+  - "Potential future revival tied to sustainability tooling."
+---
+
+## Background
+
+The Websus.lol project was part of a course at Malmö University (da109a), where we learned about web services, such as APIs, and the OpenAPI standard.
+
+## Project Idea
+
+The entire project initially started with Ellie Fagerberg and me wanting to take the opportunity to create something for our startup, Merely Emissions, at the time. We had some ideas about what we might want to do.
+
+When Merely Emissions started as a university project, there were project and retrospect groups. The retrospect groups consisted of three other groups. In one of these different groups, we met Filip Bengtegård Book. He said that the next time we had the opportunity to create something together, he would love to do it with Ellie and me, so we invited him to the web services project.
+
+Later, Ahmad Toron would also join the project group, but that was when the project was already decided.
+
+## Merely Emissions Ideation
+
+Now, it was time for some ideation. Which of the possible projects that Ellie and I had in mind that we wanted to create for Merely Emissions should we make? Filip was fine with whatever, which was super nice for Ellie and me; it was just like having another team member on board. However, during that time, we grew a bit tired of all the strict rules of sustainability and reporting on it, so how could we make this fun?
+
+## Does Merely Emissions have an API?
+
+No, we did not have an API at the time, so how could we use the Merely Emissions data to make something fun? Well, we built an API for Merely Emissions so that we could use it in the university course.
+
+## Can we make Merely Emissions data fun?
+
+Since we were a bit tired of companies not releasing the impact of websites and web applications, we decided to make memes about their website's sustainability. That is why we called the website websus.lol, Web Sustainability LOL.
+
+## Technologies
+
+How would we create a meme generator, then?
+
+### Merely Emissions - To Get Digital Sustainability Data
+
+We used our recently created Merely Emissions API to gather sustainability data from websites, which we would then use to make memes. This data was received and parsed to be sent to the OpenAI GPT API.
+
+### OpenAI GPT - To Generate Meme Texts
+
+#### Thresholds
+
+To get the actual meme texts, we needed a way to create them based on the data provided by the Merely Emissions API. We, therefore, created thresholds for different metrics to later build a custom prompt.
+
+The different thresholds were primarily based on the average values presented when users scan their website in the Merely Emissions app.
+
+#### Prompt engineering
+
+We then spent several hours perfecting our prompts so that the GPT 3.5 Turbo module understood what to do and how to do it.
+
+In the end, we ended up writing Regex to get rid of weird stuff that GPT 3.5 Turbo kept sending, such as quotation marks here and there and some other not-so-fun stuff.
+
+If you ever try to create texts for a meme, describe the meme; do not mention it by name. We learned this the hard way when the module started talking about the meme, when it was initially used, how it is used, and so on.
+
+In the end, the responses we got from OpenAI could have been better, but they were OK for the project exhibition.
+
+### Memegen - To Generate Meme Images
+
+We decided to look at different meme-generating services and see if there were any free APIs available to us since this was a student project. Happily enough, after many hours of searching, we were able to find one that fit our needs: memegen or memegen.link.
+
+Memegen is an open-source API that lets you select a template and apply text to it without watermarks (if you self-host it or pay $10 a month). Since Memegen is open-source, we decided to self-host it.
+
+In Memegen, you can create a custom watermark on the bottom corner, but we wanted to be able to set this watermark dynamically for all our memes to display a short link to the memes instead of just saying websus.lol. The watermark need led to rewriting some of the code in Memegen and redeploying it.
+
+We could now set the watermarks for each image through requests to the modified Memegen API.
+
+## The product
+
+Unfortunately, for the time being, this project is privately owned by Merely Emissions, and I alone do not possess the rights to publish the code without everyone's approval. Therefore, some images and discussions will do.
+
+### The Website / Frontend
+
+websus.lol, the frontend is built with React since that is a framework that we in the group were very familiar with, so the frontend could be built very quickly, and we could focus on building the actual API and backend.
+
+### The API and Backend
+
+The build process was straightforward. We built the API using Hono and Zod objects to streamline the whole process. Hono provided a quick way to add endpoints with an easy-to-understand structure, while Zod provided easy objects to handle and type safely.
+
+## CI/CD
+
+### Previews and Deployment
+
+To speed up the process and get updates out quicker, we built GitHub Actions. We had actions to build and create previews on pull requests and actions to deploy code to Cloudflare once an update was made to the main branch, where we hosted everything.
+
+### Storing images and data
+
+To store the images generated by the websus.lol, we used R2 buckets, which is Cloudflare's version of the S3 buckets from AWS (Amazon Web Services).
+
+Handling and storing data is done through a simple Key-value database.

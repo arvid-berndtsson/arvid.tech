@@ -1,0 +1,62 @@
+---
+title: "redstr: A Rust-Based Red Team String Transformation and Evasion Toolkit"
+summary: "redstr is a Rust-based red team string transformation toolkit for penetration testing, adversary simulation, and security control validation."
+category: "offensive-security"
+tags: [security, red-team, penetration-testing, rust, tooling, waf-evasion, xss, sqli]
+status: "active"
+language: "Rust"
+repoUrl: "https://github.com/arvid-berndtsson/redstr"
+docsUrl: "https://github.com/arvid-berndtsson/redstr#readme"
+publishedDate: 2026-02-07
+updatedDate: 2026-02-07
+coverImageAlt: "redstr string transformation toolkit"
+featured: true
+problem: "Security teams need fast, composable transformation tooling to test filters, WAFs, and detection pipelines against realistic evasion behavior."
+whatItDoes:
+  - "Provides composable string encoders and obfuscators for adversary simulation."
+  - "Includes SQLi/XSS-oriented transformation helpers for control validation."
+  - "Supports CLI, crate usage, and API integration patterns."
+useCases:
+  - "Red team payload mutation and iterative test-case generation."
+  - "Blue team control stress-testing against evasive inputs."
+  - "CTF and internal security tooling automation."
+stackArchitecture:
+  - "Rust core crate with modular transformation primitives."
+  - "CLI interface for local operator workflows."
+  - "Optional API exposure for platform integrations."
+roadmap:
+  - "Expand transformations and add cross-ecosystem adapters."
+  - "Improve packaged distribution and integration examples."
+  - "Continue performance and reliability benchmarking."
+relatedResearch: [when-pypi-becomes-the-attack-vector-39-000-downloads-of-malicious-python-packages, a-practical-guide-to-preventing-subdomain-hijacking]
+---
+
+redstr is a red team–oriented string transformation and obfuscation tool designed to support penetration testing, adversary simulation, and security testing workflows. The project focuses on making common and advanced string manipulations easily accessible, both as a standalone utility and as a reusable component in other tooling. The source code, documentation, and releases are available on GitHub: [github.com/arvid-berndtsson/redstr](https://github.com/arvid-berndtsson/redstr).
+
+## Why this project exists
+
+The primary motivation behind redstr was the need for a fast, reliable, and reusable string transformation library written in Rust. During internal security testing at work and regular participation in Capture The Flag (CTF) challenges, I frequently needed to perform chained string manipulations such as encoding, obfuscation, and filter evasion. Existing tools were either fragmented, language-specific in ways that made reuse difficult, or not well-suited for embedding into custom tooling.
+
+redstr was built to act as a single, composable foundation that could be reused across quick experiments, CTF tooling, and internal security testing utilities. By implementing it as a Rust crate first, the project prioritizes performance, safety, and long-term extensibility while remaining usable both as a library and as a standalone binary.
+
+The core of redstr is implemented in Rust, with an emphasis on performance, safety, and composability. The tool provides a broad set of transformations commonly used in offensive security scenarios, including Base64 encoding and decoding, URL encoding, hexadecimal encoding, HTML entity encoding, leetspeak transformations, case swapping and case conversion, and general-purpose string obfuscation. These primitives are intended to be combined, allowing users to layer multiple transformations to model real-world evasion techniques.
+
+Beyond basic encoding, redstr includes functionality specifically aimed at filter, WAF, and detection evasion. This includes SQL injection helpers such as comment-based wrappers and variations, cross-site scripting payload transformations, tag and attribute variations, and mixed-case or Unicode-based manipulation. Several features make use of Unicode characters, including Cyrillic homoglyphs, to support domain spoofing and email obfuscation scenarios where visual similarity can be leveraged to bypass naive filters.
+
+The project also addresses adjacent red team needs that go beyond direct string encoding. redstr includes utilities for random user-agent generation, domain typo-squatting generation, and domain and email obfuscation techniques. These features are useful both for offensive testing and for defensive teams validating detection and prevention mechanisms against realistic attacker behavior.
+
+redstr is distributed as a Rust crate and can be installed directly via Cargo, making it easy to embed into other Rust-based tools or workflows. In addition to the local CLI/library usage, the project includes an optional self-hosted server component that exposes the functionality over an API. This allows teams to integrate redstr into distributed tooling, automation pipelines, or internal platforms without embedding the logic directly into each application.
+
+## Extensibility and future integrations
+
+While redstr is currently distributed primarily as a Rust crate and CLI binary, it is designed with future integrations in mind. Planned and considered extensions include adapters for other ecosystems such as JavaScript (NPM), Python, and Go, as well as tighter desktop workflow integrations. One concrete example under consideration is a Raycast extension to make common transformations instantly accessible during day-to-day security work.
+
+The existence of a standalone binary also allows redstr to be distributed through additional channels, such as package managers, without requiring consumers to write Rust code directly.
+
+## Performance and usage examples
+
+Basic performance benchmarks have been conducted to validate that redstr performs adequately for interactive and automated use cases. While the benchmarks are not intended to be exhaustive or to position redstr as the fastest possible implementation, they demonstrate that the design choices are suitable for real-world security tooling.
+
+Detailed benchmark results are documented in the repository at [docs/performance.md](https://github.com/arvid-berndtsson/redstr/blob/main/docs/performance.md). The repository also includes practical usage examples at [examples/](https://github.com/arvid-berndtsson/redstr/tree/main/examples) that demonstrate common transformation chains and workflows.
+
+At the time of writing, the current released version of redstr is 0.2.6. The project is actively developed with a focus on extensibility, allowing new transformations and evasion techniques to be added as attack and defense patterns evolve. redstr is intended to be useful both for red teams performing offensive testing and for blue teams building, validating, or stress-testing detection and prevention systems against realistic and composable string-based attack techniques.

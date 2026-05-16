@@ -1,0 +1,37 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ContentContainer from '../../components/ContentContainer.astro';
+import ExperienceTimeline from '../../components/ExperienceTimeline.astro';
+import { getCollection } from 'astro:content';
+
+const allExperiences = await getCollection('experiences');
+const sortedExperiences = allExperiences
+  .sort((a, b) => {
+    const dateA = a.data.startDate.valueOf();
+    const dateB = b.data.startDate.valueOf();
+    return dateB - dateA;
+  });
+---
+
+<BaseLayout 
+  title="Experiences – Arvid Berndtsson" 
+  description="Professional experience in information security, software development, and cybersecurity leadership."
+>
+  <div class="bg-background pt-8 pb-16">
+    <ContentContainer>
+      <header class="mb-14">
+        <p class="animate-fade-in-up text-xs font-semibold uppercase tracking-[0.2em] text-amber-800 dark:text-amber-400 mb-3">Career</p>
+        <h1 class="animate-fade-in-up stagger-1 text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-foreground mb-4">
+          Experiences
+        </h1>
+        <p class="animate-fade-in-up stagger-2 text-lg text-muted-foreground max-w-2xl">
+          Professional experience in information security, software development, and cybersecurity leadership.
+        </p>
+      </header>
+
+      <div class="animate-fade-in-up stagger-3">
+        <ExperienceTimeline experiences={sortedExperiences} titleLevel="h2" />
+      </div>
+    </ContentContainer>
+  </div>
+</BaseLayout>
