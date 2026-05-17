@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ContentContainer from '../components/ContentContainer.astro';
-import Search from 'astro-pagefind/components/Search';
+import Search from 'astro-pagefind/components/Search.astro';
 ---
 
 <BaseLayout
@@ -23,8 +23,8 @@ import Search from 'astro-pagefind/components/Search';
             Search across blog posts, projects, and experiences.
           </p>
         </header>
-        <div class="animate-fade-in-up stagger-3 min-h-[320px]">
-          <Search id="search" className="min-h-[320px]" />
+        <div id="search" class="animate-fade-in-up stagger-3 min-h-[320px]">
+          <Search className="min-h-[320px]" />
         </div>
       </div>
     </ContentContainer>
