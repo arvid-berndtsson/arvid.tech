@@ -54,7 +54,7 @@ function cleanDisplayText(text: string) {
           </p>
           <p class="animate-fade-in-up stagger-3 mt-8 text-base sm:text-lg text-foreground/90 max-w-3xl leading-relaxed">
             I'm {siteConfig.name}, an information security lead and full-stack developer based in {siteConfig.location}.
-            I help companies keep data safe and build reliable software.
+            I help companies turn security requirements into practical systems, controls, and engineering habits.
           </p>
         </div>
       </ContentContainer>
@@ -67,8 +67,14 @@ function cleanDisplayText(text: string) {
           <ProseContent>
             <h2 class={sectionTitleClass}>What I do</h2>
             <p>
-              My focus is ISO 27001, SOC 2, risk management, data loss prevention, incident response, and modern web applications.
-              I work across the full stack, from security architecture to hands-on development.
+              I work across security leadership and hands-on engineering: ISO 27001, SOC 2, TISAX readiness,
+              risk management, vendor assessments, access reviews, secure development workflows, incident readiness,
+              customer security questions, AI governance, and modern web applications.
+            </p>
+            <p>
+              A lot of my work is about making security operational. That can mean rebuilding an ISMS, setting up
+              evidence and control workflows, introducing code and vulnerability review tools, improving backup and
+              incident exercises, answering customer trust questions, or helping teams choose safer ways to build with AI.
             </p>
             {siteConfig.availability && (
               <p class="mt-4 text-muted-foreground/90">{siteConfig.availability}</p>
@@ -179,7 +185,8 @@ function cleanDisplayText(text: string) {
 
             <h2 class={sectionTitleClass}>Get in touch</h2>
             <p>
-              You can reach me at{' '}
+              The best reasons to reach out are information security, compliance, customer trust, secure software,
+              AI governance, or practical product and engineering ideas. You can reach me at{' '}
               <a href={`mailto:${siteConfig.email}`} class={linkAccent}>{siteConfig.email}</a>, or on{' '}
               <a href={siteConfig.social.github} target="_blank" rel="noopener noreferrer" class={linkAccent}>GitHub</a>
               {' '}and{' '}

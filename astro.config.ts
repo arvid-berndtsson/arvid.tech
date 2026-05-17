@@ -3,7 +3,6 @@ import tailwindcss from "@tailwindcss/vite";
 import mdx from "@astrojs/mdx";
 import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
-import icon from "astro-icon";
 import pagefind from "astro-pagefind";
 
 // https://astro.build/config
@@ -21,20 +20,11 @@ export default defineConfig({
       },
     },
   },
-  integrations: [mdx(), react(), sitemap(), icon(), pagefind()],
+  integrations: [mdx(), react(), sitemap(), pagefind()],
   vite: {
     plugins: [tailwindcss()],
     optimizeDeps: {
       include: ["react-dom/client"],
-    },
-    resolve: {
-      // Use React's edge-compatible server renderer in production so Cloudflare Workers
-      // don't hit "MessageChannel is not defined" (react-dom/server.browser uses it).
-      ...(import.meta.env.PROD && {
-        alias: {
-          "react-dom/server": "react-dom/server.edge",
-        },
-      }),
     },
     css: {
       postcss: "./postcss.config.mjs",
