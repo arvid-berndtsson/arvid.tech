@@ -10,20 +10,17 @@ const sortedRecommendations = [...RECOMMENDATIONS].sort(
 ---
 
 <BaseLayout
-  title="Recommendations – Arvid Berndtsson"
+  title="Recommendations - Arvid Berndtsson"
   description="Recommendations from colleagues, teachers, and collaborators."
 >
   <div class="bg-background relative overflow-hidden py-14 sm:py-16 pb-20">
     <div class="pointer-events-none absolute inset-0" aria-hidden="true">
-      <div class="absolute top-1/4 -right-32 h-64 w-64 rounded-full bg-amber-600/12 dark:bg-amber-600/8 blur-3xl animate-pulse-glow"></div>
-      <div class="absolute -bottom-12 -left-20 h-56 w-56 rounded-full bg-amber-500/10 dark:bg-amber-600/8 blur-3xl animate-pulse-glow" style="animation-delay: 2s;"></div>
+      <div class="absolute top-1/4 -right-32 h-64 w-64 rounded-full bg-orange-500/12 dark:bg-orange-500/8 blur-3xl animate-pulse-glow"></div>
+      <div class="absolute -bottom-12 -left-20 h-56 w-56 rounded-full bg-orange-400/10 dark:bg-orange-500/8 blur-3xl animate-pulse-glow" style="animation-delay: 2s;"></div>
     </div>
     <ContentContainer>
       <div class="relative">
         <header class="mb-10">
-          <p class="animate-fade-in-up text-xs font-semibold uppercase tracking-[0.2em] text-amber-800 dark:text-amber-400 mb-2">
-            Testimonials
-          </p>
           <h1 class="animate-fade-in-up stagger-1 text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-foreground mb-2">
             Recommendations
           </h1>
@@ -34,8 +31,8 @@ const sortedRecommendations = [...RECOMMENDATIONS].sort(
 
         <div class="animate-fade-in-up stagger-3 space-y-5 sm:space-y-6">
           {sortedRecommendations.map((rec) => (
-            <article class="rounded-xl border border-border/60 bg-muted/30 dark:bg-muted/20 px-5 py-6 sm:px-6 sm:py-7 relative">
-              <span class="text-4xl sm:text-5xl leading-none text-amber-600/20 dark:text-amber-500/20 font-serif select-none absolute top-5 right-5" aria-hidden="true">&ldquo;</span>
+            <article class="recommendation-card rounded-xl border bg-muted/30 dark:bg-muted/20 px-5 py-6 sm:px-6 sm:py-7 relative">
+              <span class="recommendation-quote-mark text-4xl sm:text-5xl leading-none font-serif select-none absolute top-5 right-5" data-testid="recommendation-quote-mark" aria-hidden="true">&ldquo;</span>
               <blockquote class="relative pr-8">
                 <p class="recommendation-content-en text-foreground/90 leading-relaxed text-base sm:text-lg" data-original-language={rec.original_language ?? undefined}>
                   {rec.content}
@@ -50,7 +47,7 @@ const sortedRecommendations = [...RECOMMENDATIONS].sort(
                 <div class="flex items-center gap-3">
                   <RecommendationAvatar name={rec.name} />
                   <div>
-                    <strong class="text-amber-800 dark:text-amber-400 font-semibold text-sm">{rec.name}</strong>
+                    <strong class="text-foreground font-semibold text-sm">{rec.name}</strong>
                     <p class="text-muted-foreground text-xs">
                       {rec.role}{rec.company ? ` at ${rec.company}` : ''}
                     </p>
@@ -64,7 +61,7 @@ const sortedRecommendations = [...RECOMMENDATIONS].sort(
                 <div class="mt-4 pt-4 border-t border-border/60">
                   <button
                     type="button"
-                    class="toggle-original text-xs font-medium text-amber-800 dark:text-amber-400 hover:text-amber-900 dark:hover:text-amber-300 transition-colors"
+                    class="toggle-original text-xs font-medium text-foreground underline decoration-orange-500 decoration-2 underline-offset-4 hover:text-foreground dark:decoration-orange-400 transition-colors"
                     data-original-label={rec.original_language === 'sv' ? 'Swedish' : rec.original_language}
                     aria-label="Toggle original language version"
                   >

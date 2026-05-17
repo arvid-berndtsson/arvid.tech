@@ -6,7 +6,6 @@ import { siteConfig } from '../config/site';
 import { getRecentRecommendations } from '../../data/recommendations';
 import { buttonVariants } from '../components/ui/button';
 import { ContentCard } from '../components/ContentCard';
-import { ScrollProgress } from '../components/ScrollProgress';
 import { toBlogSlug } from '../lib/content-slugs';
 import { toImageSrc } from '../lib/content-images';
 
@@ -23,15 +22,6 @@ const featuredProjects = allProjects
 
 const recentRecommendations = getRecentRecommendations(3);
 
-const quickLinks = [
-  { name: 'Projects', href: '#projects' },
-  { name: 'Testimonials', href: '#testimonials' },
-  { name: 'Blog', href: '#blog' },
-  { name: 'Experience', href: '/experiences' },
-  { name: 'About', href: '/about' },
-  { name: 'Contact', href: '#connect' },
-];
-
 const ctaPrimary = buttonVariants({
   variant: 'default',
   size: 'lg',
@@ -43,24 +33,20 @@ const ctaOutline = buttonVariants({
   class: 'rounded-full hover:bg-muted/80 hover:border-foreground/10 dark:hover:bg-muted/60 hover:-translate-y-0.5 transition-colors duration-200',
 });
 const linkAccent =
-  'inline-flex items-center gap-2 text-sm font-semibold text-amber-800 dark:text-amber-400 hover:text-amber-900 dark:hover:text-amber-300 transition-all hover:gap-3';
+  'inline-flex items-center gap-2 text-sm font-semibold text-foreground underline decoration-orange-500 decoration-2 underline-offset-4 hover:text-foreground dark:decoration-orange-400 transition-all hover:gap-3';
 ---
 
 <BaseLayout>
-  <ScrollProgress client:load />
   <div class="bg-background">
     <!-- Hero -->
     <section class="relative overflow-hidden py-24 sm:py-32 lg:py-40" aria-label="Introduction">
       <div class="pointer-events-none absolute inset-0" aria-hidden="true">
-        <div class="absolute -top-24 -right-24 h-96 w-96 rounded-full bg-amber-600/15 dark:bg-amber-600/10 blur-3xl animate-pulse-glow"></div>
-        <div class="absolute top-1/2 -left-32 h-72 w-72 rounded-full bg-amber-500/10 dark:bg-amber-600/8 blur-3xl animate-pulse-glow" style="animation-delay: 2s;"></div>
+        <div class="absolute -top-24 -right-24 h-96 w-96 rounded-full bg-orange-500/15 dark:bg-orange-500/10 blur-3xl animate-pulse-glow"></div>
+        <div class="absolute top-1/2 -left-32 h-72 w-72 rounded-full bg-orange-400/10 dark:bg-orange-500/8 blur-3xl animate-pulse-glow" style="animation-delay: 2s;"></div>
       </div>
 
       <ContentContainer>
         <div class="relative">
-        <p class="animate-fade-in-up text-sm font-semibold uppercase tracking-widest text-gray-800 dark:text-amber-400 mb-4">
-          {siteConfig.location}
-        </p>
         <h1 class="animate-fade-in-up stagger-1 text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tighter text-foreground leading-[0.95]">
           {siteConfig.name}
         </h1>
@@ -81,142 +67,9 @@ const linkAccent =
             Get in touch
           </a>
         </div>
-        <nav class="animate-fade-in-up stagger-5 mt-14 pt-10 border-t border-border/60" aria-label="Quick links">
-          <p class="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground mb-4">Jump to</p>
-          <ul class="flex flex-wrap gap-3">
-            {quickLinks.map((item) => (
-              <li>
-                <a
-                  href={item.href}
-                  class="inline-flex items-center rounded-full bg-muted/80 dark:bg-muted/60 px-4 py-2 text-sm font-medium text-foreground hover:bg-amber-100 hover:text-amber-800 dark:hover:bg-amber-900/40 dark:hover:text-amber-300 transition-colors"
-                >
-                  {item.name}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </nav>
         </div>
       </ContentContainer>
     </section>
-
-    <!-- Projects -->
-    {featuredProjects.length > 0 && (
-      <section
-        id="projects"
-        class="scroll-mt-20 py-20 sm:py-24 bg-muted/30 dark:bg-muted/20"
-        aria-labelledby="projects-heading"
-      >
-        <ContentContainer>
-          <header class="mb-14">
-            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-amber-800 dark:text-amber-400 mb-2">
-              Portfolio
-            </p>
-            <h2 id="projects-heading" class="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-foreground">
-              Featured projects
-            </h2>
-            <p class="mt-2 text-muted-foreground text-lg max-w-md">
-              Things I've built — security, dev tools, and web.
-            </p>
-          </header>
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {featuredProjects.map((project, i) => (
-              <article class={i === 3 ? 'hidden md:block lg:hidden' : ''}>
-                <ContentCard
-                  variant="project"
-                  slug={project.id}
-                  title={project.data.title}
-                  summary={project.data.summary}
-                  tags={project.data.tags}
-                  date={project.data.updatedDate.toISOString()}
-                  repoUrl={project.data.repoUrl ?? undefined}
-                  demoUrl={project.data.demoUrl ?? undefined}
-                  coverImage={project.data.coverImage ?? undefined}
-                  coverImageAlt={project.data.coverImageAlt ?? undefined}
-                  showExtraTags={true}
-                  summaryLines={3}
-                  titleLevel="h3"
-                />
-              </article>
-            ))}
-          </div>
-          <div class="mt-12 text-center">
-            <a href="/projects" class={linkAccent} aria-label="Go to full projects list">
-              View all projects
-              <svg class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
-            </a>
-          </div>
-        </ContentContainer>
-      </section>
-    )}
-
-    <!-- Testimonials: compact, two columns -->
-    {recentRecommendations.length > 0 && (
-      <section
-        id="testimonials"
-        class="scroll-mt-20 relative overflow-hidden py-14 sm:py-16 bg-background"
-        aria-labelledby="testimonials-heading"
-      >
-        <div class="pointer-events-none absolute inset-0" aria-hidden="true">
-          <div class="absolute top-1/4 -right-32 h-64 w-64 rounded-full bg-amber-600/12 dark:bg-amber-600/8 blur-3xl animate-pulse-glow"></div>
-          <div class="absolute -bottom-12 -left-20 h-56 w-56 rounded-full bg-amber-500/10 dark:bg-amber-600/8 blur-3xl animate-pulse-glow" style="animation-delay: 2s;"></div>
-        </div>
-        <ContentContainer>
-          <div class="relative">
-            <header class="mb-6">
-              <p class="text-xs font-semibold uppercase tracking-[0.2em] text-amber-800 dark:text-amber-400 mb-1">
-                Testimonials
-              </p>
-              <h2 id="testimonials-heading" class="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
-                What people say
-              </h2>
-            </header>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
-              {recentRecommendations.slice(0, 2).map((rec) => {
-                const excerpt = rec.content.length > 140 ? `${rec.content.slice(0, 140).trim()}\u2026` : rec.content;
-                const roleLine = [rec.role, rec.company].filter(Boolean).join(' at ');
-                return (
-                  <a
-                    href="/recommendations"
-                    class="testimonial-card rounded-xl border-2 dark:border dark:border-border/60 bg-muted/30 dark:bg-muted/20 px-4 py-5 sm:px-5 sm:py-6 block no-underline text-inherit transition-shadow duration-200 hover:shadow-lg"
-                    aria-label={`Read full recommendation from ${rec.name}`}
-                  >
-                    <span class="testimonial-quote text-4xl leading-none font-serif select-none" aria-hidden="true">&ldquo;</span>
-                    <blockquote class="mt-1">
-                      <p class="text-base sm:text-lg text-foreground/90 leading-relaxed">
-                        {excerpt}
-                      </p>
-                      <footer class="mt-4 flex flex-wrap items-baseline gap-2">
-                        <span class="text-amber-800 dark:text-amber-400 font-semibold text-sm">
-                          {rec.name}
-                        </span>
-                        {roleLine && (
-                          <span class="text-foreground/70 text-xs dark:text-muted-foreground">
-                            {roleLine}
-                          </span>
-                        )}
-                      </footer>
-                    </blockquote>
-                  </a>
-                );
-              })}
-            </div>
-
-            <div class="mt-6 pt-6 border-t border-border/60">
-              <a href="/recommendations" class={linkAccent} aria-label="View all recommendations">
-                View all recommendations
-                <svg class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                </svg>
-              </a>
-            </div>
-          </div>
-        </ContentContainer>
-      </section>
-    )}
 
     <!-- Blog -->
     {sortedPosts.length > 0 && (
@@ -227,9 +80,6 @@ const linkAccent =
       >
         <ContentContainer>
           <header class="text-center mb-14">
-            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-amber-800 dark:text-amber-400 mb-2">
-              Blog
-            </p>
             <h2 id="blog-heading" class="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-foreground">
               Recent posts
             </h2>
@@ -268,6 +118,118 @@ const linkAccent =
       </section>
     )}
 
+    <!-- Testimonials: compact, two columns -->
+    {recentRecommendations.length > 0 && (
+      <section
+        id="testimonials"
+        class="scroll-mt-20 relative overflow-hidden py-14 sm:py-16 bg-background"
+        aria-labelledby="testimonials-heading"
+      >
+        <div class="pointer-events-none absolute inset-0" aria-hidden="true">
+          <div class="absolute top-1/4 -right-32 h-64 w-64 rounded-full bg-orange-500/12 dark:bg-orange-500/8 blur-3xl animate-pulse-glow"></div>
+          <div class="absolute -bottom-12 -left-20 h-56 w-56 rounded-full bg-orange-400/10 dark:bg-orange-500/8 blur-3xl animate-pulse-glow" style="animation-delay: 2s;"></div>
+        </div>
+        <ContentContainer>
+          <div class="relative">
+            <header class="mb-6">
+              <h2 id="testimonials-heading" class="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
+                What people say
+              </h2>
+            </header>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
+              {recentRecommendations.slice(0, 2).map((rec) => {
+                const excerpt = rec.content.length > 140 ? `${rec.content.slice(0, 140).trim()}\u2026` : rec.content;
+                const roleLine = [rec.role, rec.company].filter(Boolean).join(' at ');
+                return (
+                  <a
+                    href="/recommendations"
+                    class="testimonial-card rounded-xl border-2 dark:border dark:border-border/60 bg-muted/30 dark:bg-muted/20 px-4 py-5 sm:px-5 sm:py-6 block no-underline text-inherit transition-shadow duration-200 hover:shadow-lg"
+                    aria-label={`Read full recommendation from ${rec.name}`}
+                  >
+                    <span class="testimonial-quote text-4xl leading-none font-serif select-none" aria-hidden="true">&ldquo;</span>
+                    <blockquote class="mt-1">
+                      <p class="text-base sm:text-lg text-foreground/90 leading-relaxed">
+                        {excerpt}
+                      </p>
+                      <footer class="mt-4 flex flex-wrap items-baseline gap-2">
+                        <span class="text-foreground font-semibold text-sm">
+                          {rec.name}
+                        </span>
+                        {roleLine && (
+                          <span class="text-foreground/70 text-xs dark:text-muted-foreground">
+                            {roleLine}
+                          </span>
+                        )}
+                      </footer>
+                    </blockquote>
+                  </a>
+                );
+              })}
+            </div>
+
+            <div class="mt-6 text-center sm:text-left">
+              <a href="/recommendations" class={linkAccent} aria-label="View all recommendations">
+                View all recommendations
+                <svg class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </a>
+            </div>
+          </div>
+        </ContentContainer>
+      </section>
+    )}
+
+    <!-- Projects -->
+    {featuredProjects.length > 0 && (
+      <section
+        id="projects"
+        class="scroll-mt-20 py-20 sm:py-24 bg-muted/30 dark:bg-muted/20"
+        aria-labelledby="projects-heading"
+      >
+        <ContentContainer>
+          <header class="mb-14">
+            <h2 id="projects-heading" class="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-foreground">
+              Featured projects
+            </h2>
+            <p class="mt-2 text-muted-foreground text-lg max-w-md">
+              Things I've built, security, dev tools, and web.
+            </p>
+          </header>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {featuredProjects.map((project, i) => (
+              <article class={i === 3 ? 'hidden md:block lg:hidden' : ''}>
+                <ContentCard
+                  variant="project"
+                  slug={project.id}
+                  title={project.data.title}
+                  summary={project.data.summary}
+                  tags={project.data.tags}
+                  date={project.data.updatedDate.toISOString()}
+                  repoUrl={project.data.repoUrl ?? undefined}
+                  demoUrl={project.data.demoUrl ?? undefined}
+                  coverImage={project.data.coverImage ?? undefined}
+                  coverImageAlt={project.data.coverImageAlt ?? undefined}
+                  showExtraTags={true}
+                  summaryLines={3}
+                  titleLevel="h3"
+                />
+              </article>
+            ))}
+          </div>
+          <div class="mt-12 text-center">
+            <a href="/projects" class={linkAccent} aria-label="Go to full projects list">
+              View all projects
+              <svg class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </a>
+          </div>
+        </ContentContainer>
+      </section>
+    )}
+
     <!-- CTA -->
     <section
       id="connect"
@@ -275,7 +237,7 @@ const linkAccent =
       aria-labelledby="connect-heading"
     >
       <div class="pointer-events-none absolute inset-0" aria-hidden="true">
-        <div class="absolute bottom-0 left-1/2 -translate-x-1/2 h-80 w-[800px] rounded-full bg-amber-600/12 dark:bg-amber-600/8 blur-3xl"></div>
+        <div class="absolute bottom-0 left-1/2 -translate-x-1/2 h-80 w-[800px] rounded-full bg-orange-500/12 dark:bg-orange-500/8 blur-3xl"></div>
       </div>
       <ContentContainer>
         <div class="relative mx-auto max-w-xl text-center">

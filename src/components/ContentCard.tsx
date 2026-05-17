@@ -8,20 +8,20 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-/** Design tokens aligned with landing hero: amber accents, uppercase labels, pill tags */
+/** Design tokens aligned with landing hero: orange accents, uppercase date labels, compact metadata */
 const cardLinkClass =
-  "flex flex-col flex-grow min-h-0 rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2";
+  "group flex flex-col flex-grow min-h-0 rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2";
 const titleHoverClass =
-  "font-semibold tracking-tight text-lg text-foreground hover:text-amber-800 dark:hover:text-amber-400 transition-colors";
+  "content-card-title font-semibold tracking-tight text-lg text-foreground transition-colors";
 const metaLabelClass =
   "text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground";
-const tagPillClass =
-  "rounded-full bg-muted/80 dark:bg-muted/60 px-3 py-1 text-xs font-medium text-muted-foreground";
 /** Max tags shown on a card so they don't wrap beyond 2 rows */
 const MAX_TAGS_ON_CARD = 5;
-const tagsWrapperClass = "flex flex-wrap gap-2 max-h-[3.5rem] overflow-hidden";
+const tagSummaryClass =
+  "mt-3 flex-shrink-0 text-xs leading-relaxed text-muted-foreground line-clamp-2";
+const tagSummaryLabelClass = "font-semibold text-foreground/80";
 const footerLinkClass =
-  "text-sm font-semibold text-amber-800 dark:text-amber-400 hover:text-amber-900 dark:hover:text-amber-300 transition-colors";
+  "text-sm font-semibold text-foreground underline decoration-orange-500 decoration-2 underline-offset-4 hover:text-foreground dark:decoration-orange-400 transition-colors";
 
 /** Shared options for content list cards */
 type ContentCardCommon = {
@@ -135,7 +135,21 @@ export function ContentCard(props: ContentCardProps) {
     return { display, overflow };
   };
 
-  /* Hero design language: image-first card, amber accents, pill tags */
+  const renderTagSummary = (tags: string[] | undefined, label: string) => {
+    if (!showExtraTags || !tags || tags.length === 0) return null;
+    const { display, overflow } = getDisplayTags(tags);
+    const summary =
+      overflow > 0
+        ? `${display.join(", ")}, and ${overflow} more`
+        : display.join(", ");
+    return (
+      <p className={tagSummaryClass} data-testid="content-card-tags">
+        <span className={tagSummaryLabelClass}>{label}:</span> {summary}
+      </p>
+    );
+  };
+
+  /* Hero design language: image-first card, orange accents, compact metadata */
   if (props.variant === "project") {
     const href = `/projects/${props.slug}`;
     const hasCover = props.coverImage && props.coverImage.trim() !== "";
@@ -182,29 +196,7 @@ export function ContentCard(props: ContentCardProps) {
                 <span className="block flex-grow min-h-[1.5rem]" aria-hidden />
               )}
             </div>
-            {showExtraTags &&
-              props.tags &&
-              props.tags.length > 0 &&
-              (() => {
-                const { display, overflow } = getDisplayTags(props.tags);
-                return (
-                  <div className={`${tagsWrapperClass} mt-3 flex-shrink-0`}>
-                    {display.map((tag) => (
-                      <span key={tag} className={tagPillClass}>
-                        {tag}
-                      </span>
-                    ))}
-                    {overflow > 0 && (
-                      <span
-                        className={tagPillClass}
-                        aria-label={`${overflow} more tags`}
-                      >
-                        +{overflow}
-                      </span>
-                    )}
-                  </div>
-                );
-              })()}
+            {renderTagSummary(props.tags, "Tags")}
           </CardContent>
         </a>
         {(props.repoUrl || props.demoUrl) && (
@@ -279,29 +271,7 @@ export function ContentCard(props: ContentCardProps) {
                 <span className="block flex-grow min-h-[1.5rem]" aria-hidden />
               )}
             </div>
-            {showExtraTags &&
-              props.tags &&
-              props.tags.length > 0 &&
-              (() => {
-                const { display, overflow } = getDisplayTags(props.tags);
-                return (
-                  <div className={`${tagsWrapperClass} mt-3 flex-shrink-0`}>
-                    {display.map((tag) => (
-                      <span key={tag} className={tagPillClass}>
-                        {tag}
-                      </span>
-                    ))}
-                    {overflow > 0 && (
-                      <span
-                        className={tagPillClass}
-                        aria-label={`${overflow} more tags`}
-                      >
-                        +{overflow}
-                      </span>
-                    )}
-                  </div>
-                );
-              })()}
+            {renderTagSummary(props.tags, "Tags")}
           </CardContent>
         </a>
       </Card>

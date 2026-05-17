@@ -40,6 +40,26 @@ const MOBILE_NAV_ICONS: Record<
   Search: Search,
 };
 
+function LogoMark({ className }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 100 100"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path
+        d="M40.0635 39.9993C40.0635 39.9993 40.6908 49.5747 50.1953 49.5747C59.6998 49.5747 59.9365 39.9993 59.9365 39.9993M36.7515 16.3683L15.7268 75.8382C12.8451 83.9893 18.8914 92.5401 27.537 92.5401C34.4552 92.5401 40.0635 86.9318 40.0635 80.0135V69.643C40.0635 64.1552 44.5122 59.7065 50 59.7065C55.4878 59.7065 59.9365 64.1552 59.9365 69.643V80.0135C59.9365 86.9318 65.5448 92.5401 72.463 92.5401C81.1085 92.5401 87.1549 83.9893 84.2732 75.8382L63.2485 16.3683C61.2635 10.7537 55.9551 7 50 7C44.0449 7 38.7365 10.7537 36.7515 16.3683Z"
+        stroke="currentColor"
+        strokeWidth={3.45644}
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
 export interface NavItem {
   name: string;
   href: string;
@@ -77,9 +97,10 @@ export function NavBar({
           <div className="flex h-16 items-center justify-between">
             <a
               href="/"
-              className="text-lg font-bold tracking-tight text-foreground transition-colors hover:text-amber-700 dark:hover:text-amber-500"
+              className="inline-flex items-center gap-2 text-lg font-bold tracking-tight text-foreground transition-colors hover:text-orange-500 dark:hover:text-orange-400"
             >
-              {siteName}
+              <LogoMark className="h-7 w-7 shrink-0" />
+              <span>{siteName}</span>
             </a>
 
             <nav

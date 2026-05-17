@@ -8,6 +8,11 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+  actions: read
+  packages: read
+
 jobs:
   unicode-check:
     runs-on: ubuntu-latest

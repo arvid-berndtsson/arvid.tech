@@ -47,15 +47,14 @@ const itemListData = {
 };
 ---
 
-<BaseLayout 
-  title="Projects: Security, Compliance, and Products – Arvid Berndtsson" 
+<BaseLayout
+  title="Projects: Security, Compliance, and Products - Arvid Berndtsson"
   description="Master index of projects at arvid.tech with category, status, and language grouping. Explore offensive security tools, compliance projects, and production apps."
   structuredData={itemListData}
 >
   <div class="bg-background pt-8 pb-16">
     <ContentContainer>
       <header class="mb-10">
-        <p class="animate-fade-in-up text-xs font-semibold uppercase tracking-[0.2em] text-amber-800 dark:text-amber-400 mb-3">Portfolio</p>
         <h1 class="animate-fade-in-up stagger-1 text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-foreground mb-4">
           Projects
         </h1>
@@ -72,7 +71,7 @@ const itemListData = {
             <ul class="space-y-1.5">
               {PROJECT_CATEGORIES.map((category) => (
                 <li>
-                  <a class="text-foreground hover:text-orange-600 dark:hover:text-orange-400" href={`/projects/${category}`}>
+                  <a class="text-foreground hover:text-orange-500 dark:hover:text-orange-400" href={`/projects/${category}`}>
                     {categoryLabels[category]} ({allProjects.filter((project) => project.data.category === category).length})
                   </a>
                 </li>
@@ -84,7 +83,7 @@ const itemListData = {
             <ul class="space-y-1.5">
               {Object.entries(statusCounts).map(([status, count]) => (
                 <li>
-                  <a class="text-foreground hover:text-orange-600 dark:hover:text-orange-400" href={`#status-${status}`}>
+                  <a class="text-foreground hover:text-orange-500 dark:hover:text-orange-400" href={`#status-${status}`}>
                     {statusLabel(status as 'active' | 'maintained' | 'archived')} ({count})
                   </a>
                 </li>
@@ -98,7 +97,7 @@ const itemListData = {
                 .sort((a, b) => b[1] - a[1])
                 .map(([language, count]) => (
                   <li>
-                    <a class="text-foreground hover:text-orange-600 dark:hover:text-orange-400" href={`#language-${language.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`}>
+                    <a class="text-foreground hover:text-orange-500 dark:hover:text-orange-400" href={`#language-${language.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`}>
                       {language} ({count})
                     </a>
                   </li>
@@ -111,7 +110,7 @@ const itemListData = {
       <section class="mb-12">
         <div class="flex items-baseline justify-between gap-4 mb-4">
           <h2 class="text-2xl font-semibold tracking-tight">Featured projects</h2>
-          <a href="/tools" class="text-sm font-semibold text-orange-700 dark:text-orange-400 hover:underline">View tool catalog</a>
+          <a href="/tools" class="text-sm font-semibold text-orange-500 dark:text-orange-400 hover:underline">View tool catalog</a>
         </div>
         <div class="animate-fade-in-up stagger-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {featuredProjects.map((project) => (
@@ -248,7 +247,7 @@ const itemListData = {
           ))}
         </div>
         <p class="mt-6 text-sm text-muted-foreground">
-          Looking for analysis and writeups? Browse <a href="/security-research" class="font-semibold text-orange-700 dark:text-orange-400 hover:underline">security research</a>.
+          Looking for analysis and writeups? Browse <a href="/security-research" class="font-semibold text-orange-500 dark:text-orange-400 hover:underline">security research</a>.
         </p>
       </section>
     </ContentContainer>

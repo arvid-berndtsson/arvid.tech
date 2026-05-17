@@ -65,20 +65,19 @@ const itemListData = {
 ---
 
 <BaseLayout
-  title="Security Research – Arvid Berndtsson"
+  title="Security Research - Arvid Berndtsson"
   description="Security research posts grouped by topic with summaries, publication dates, and practical takeaways."
   structuredData={itemListData}
 >
   <div class="bg-background pt-8 pb-16">
     <ContentContainer>
       <header class="mb-10">
-        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-amber-800 dark:text-amber-400 mb-3">Knowledge Hub</p>
         <h1 class="text-4xl sm:text-5xl font-bold tracking-tight mb-4">Security Research</h1>
         <p class="text-lg text-muted-foreground max-w-3xl">
           Research notes and field writeups across application security, compliance, architecture, and leadership.
         </p>
         <p class="text-sm text-muted-foreground max-w-3xl mt-3">
-          Project categories and research topics are intentionally different: categories group build artifacts in <a href="/projects" class="font-semibold text-orange-700 dark:text-orange-400 hover:underline">projects</a>, while topics group written analysis across multiple categories.
+          Project categories and research topics are intentionally different: categories group build artifacts in <a href="/projects" class="font-semibold text-orange-500 dark:text-orange-400 hover:underline">projects</a>, while topics group written analysis across multiple categories.
         </p>
       </header>
 
@@ -89,7 +88,7 @@ const itemListData = {
             <ul class="space-y-4">
               {posts.map((post) => (
                 <li class="rounded-xl border border-border/60 p-4">
-                  <a href={`/blog/${toBlogSlug(post.id)}`} class="font-semibold text-orange-700 dark:text-orange-400 hover:underline">{post.data.title}</a>
+                  <a href={`/blog/${toBlogSlug(post.id)}`} class="font-semibold text-orange-500 dark:text-orange-400 hover:underline">{post.data.title}</a>
                   <p class="text-sm text-muted-foreground mt-1">{post.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</p>
                   <p class="mt-2">{post.data.summary ?? post.data.excerpt ?? 'No summary provided.'}</p>
                   <p class="mt-2 text-sm text-muted-foreground">
@@ -114,7 +113,7 @@ const itemListData = {
       <section>
         <h2 class="text-2xl font-semibold tracking-tight mb-3">Disclosure and contact</h2>
         <p class="text-muted-foreground">
-          If you need coordinated disclosure for a potential vulnerability, use the <a href="/contact" class="font-semibold text-orange-700 dark:text-orange-400 hover:underline">contact page</a> and include clear reproduction details.
+          If you need coordinated disclosure for a potential vulnerability, use the <a href="/contact" class="font-semibold text-orange-500 dark:text-orange-400 hover:underline">contact page</a> and include clear reproduction details.
         </p>
       </section>
     </ContentContainer>
