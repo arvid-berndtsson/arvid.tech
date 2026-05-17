@@ -5,6 +5,7 @@ import ProseContent from '../../components/ProseContent.astro';
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 import { siteConfig } from '../../config/site';
 import { assertUniqueBlogSlugs, toBlogSlug } from '../../lib/content-slugs';
+import { toImageSrc } from '../../lib/content-images';
 
 export const prerender = true;
 
@@ -26,11 +27,20 @@ const { Content } = await render(post);
 const authorName = Array.isArray(post.data.author)
   ? post.data.author[0]
   : post.data.author;
+const coverImage = toImageSrc(post.data.coverImage ?? post.data.featuredImage);
+const coverImageAlt = post.data.coverImageAlt ?? '';
+const coverImageCredit = post.data.coverImageCreditName && post.data.coverImageCreditUrl
+  ? {
+      name: post.data.coverImageCreditName,
+      url: post.data.coverImageCreditUrl,
+    }
+  : null;
 ---
 
 <BaseLayout
   title={`${post.data.title} - Arvid Berndtsson`}
   description={post.data.summary || post.data.excerpt || ''}
+  image={coverImage}
   type="article"
   publishedTime={post.data.date}
   author={authorName || siteConfig.name}
@@ -71,6 +81,37 @@ const authorName = Array.isArray(post.data.author)
               </a>
             ))}
           </div>
+        )}
+
+        {coverImage && (
+          <figure class="mt-8 overflow-hidden rounded-xl border border-border/60 bg-muted/30">
+            <img
+              src={coverImage}
+              alt={coverImageAlt}
+              width="1140"
+              height="641"
+              class="block aspect-video w-full object-cover"
+            />
+            {(post.data.featuredImageCaption || coverImageCredit) && (
+              <figcaption class="px-4 py-3 text-xs leading-relaxed text-muted-foreground">
+                {post.data.featuredImageCaption && <span>{post.data.featuredImageCaption}</span>}
+                {post.data.featuredImageCaption && coverImageCredit && <span> </span>}
+                {coverImageCredit && (
+                  <span>
+                    Photo by{' '}
+                    <a
+                      href={coverImageCredit.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="font-medium text-foreground underline decoration-orange-500 decoration-2 underline-offset-4 hover:text-orange-500 dark:hover:text-orange-400"
+                    >
+                      {coverImageCredit.name}
+                    </a>
+                  </span>
+                )}
+              </figcaption>
+            )}
+          </figure>
         )}
       </header>
 
