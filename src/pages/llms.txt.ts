@@ -40,7 +40,6 @@ export const GET: APIRoute = async ({ site }) => {
     `- [Blog](${toAbsolute(site, "/blog")}): Writing archive`,
     `- [Projects](${toAbsolute(site, "/projects")}): Project portfolio`,
     `- [Security Research](${toAbsolute(site, "/security-research")}): Security-focused writing index`,
-    `- [Contact](${toAbsolute(site, "/contact")}): Contact paths`,
     "",
     "## Machine-Readable Endpoints",
     `- [Sitemap](${toAbsolute(site, "/sitemap-index.xml")}): Canonical URL inventory`,

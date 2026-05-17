@@ -14,7 +14,6 @@ ${siteConfig.description}
 - [Blog](/blog.md)
 - [Projects](/projects)
 - [Experiences](/experiences)
-- [Contact](/contact)
 - [Search](/search)
 
 ## Links

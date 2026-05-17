@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ContentContainer from '../components/ContentContainer.astro';
 import { getCollection } from 'astro:content';
+import { siteConfig } from '../config/site';
 import { toBlogSlug } from '../lib/content-slugs';
 
 const securityPosts = (await getCollection('blog'))
@@ -113,7 +114,7 @@ const itemListData = {
       <section>
         <h2 class="text-2xl font-semibold tracking-tight mb-3">Disclosure and contact</h2>
         <p class="text-muted-foreground">
-          If you need coordinated disclosure for a potential vulnerability, use the <a href="/contact" class="font-semibold text-orange-500 dark:text-orange-400 hover:underline">contact page</a> and include clear reproduction details.
+          If you need coordinated disclosure for a potential vulnerability, email <a href={`mailto:${siteConfig.email}`} class="font-semibold text-orange-500 dark:text-orange-400 hover:underline">{siteConfig.email}</a> and include clear reproduction details.
         </p>
       </section>
     </ContentContainer>
