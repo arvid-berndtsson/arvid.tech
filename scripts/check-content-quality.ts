@@ -57,11 +57,13 @@ function listTrackedContentFiles() {
       stdio: ["ignore", "pipe", "ignore"],
     });
 
-    return output
+    const tracked = output
       .split(/\r?\n/)
       .map((line) => line.trim())
       .filter(Boolean)
       .map((relativePath) => path.join(ROOT, relativePath));
+
+    return Array.from(new Set([...tracked, ...walkFiles(CONTENT_DIR)]));
   } catch {
     return walkFiles(CONTENT_DIR);
   }
@@ -107,6 +109,10 @@ function isExternalOrIgnoredTarget(target) {
   }
 
   return /^[a-zA-Z][a-zA-Z\d+.-]*:/.test(target);
+}
+
+function isHttpUrl(target) {
+  return target.startsWith("http://") || target.startsWith("https://");
 }
 
 function addIssue(filePath, line, message) {
@@ -192,7 +198,7 @@ function extractFrontmatterValue(frontmatter, key) {
 
 function getBlogSlugFromFilePath(filePath) {
   const relative = relativeFromRoot(filePath);
-  const match = relative.match(/^content\/blog\/([^/]+)\/index\.(md|mdx)$/);
+  const match = relative.match(/^content\/blog\/([^/]+)\.(md|mdx)$/);
   return match ? match[1] : null;
 }
 
@@ -208,8 +214,6 @@ function checkGlobalContentImageHostPolicy(filePath, frontmatter) {
     if (value.startsWith("./") || value.startsWith("../")) continue;
     if (!isExternalOrIgnoredTarget(value)) continue;
 
-    // External non-R2 image URLs are allowed temporarily and can be auto-migrated
-    // by scripts/sync-blog-images-to-r2.ts on main.
     if (
       (value.startsWith("http://") || value.startsWith("https://")) &&
       !value.startsWith("https://files.arvid.tech/")
@@ -231,7 +235,6 @@ function checkBlogImageHostPolicy(filePath, frontmatter) {
   const slug = getBlogSlugFromFilePath(filePath);
   if (!slug) return;
 
-  const expectedPrefix = `https://files.arvid.tech/blog/${slug}/`;
   const fields = ["coverImage", "featuredImage"];
 
   for (const field of fields) {
@@ -239,27 +242,21 @@ function checkBlogImageHostPolicy(filePath, frontmatter) {
     if (!value) continue;
 
     if (value.startsWith("./") || value.startsWith("../")) {
-      continue;
-    }
-
-    if (!isExternalOrIgnoredTarget(value)) {
-      continue;
-    }
-
-    if (
-      (value.startsWith("http://") || value.startsWith("https://")) &&
-      !value.startsWith("https://files.arvid.tech/")
-    ) {
-      // Allow remote non-R2 sources in content; CI/main automation migrates these to R2.
-      continue;
-    }
-
-    if (!value.startsWith(expectedPrefix)) {
       addIssue(
         filePath,
         1,
-        `${field} must use the R2 path prefix "${expectedPrefix}".`,
+        `${field} must use a remote URL. Upload owned blog images manually and reference their hosted URL.`,
       );
+      continue;
+    }
+
+    if (!isHttpUrl(value)) {
+      addIssue(
+        filePath,
+        1,
+        `${field} must use an http:// or https:// image URL. Upload owned blog images manually and reference their hosted URL.`,
+      );
+      continue;
     }
   }
 }
@@ -311,12 +308,12 @@ function checkLegacyPublicBlogFolder() {
     addIssue(
       filePath,
       1,
-      "Do not store post images in public/blog. Move them next to the post in content/blog/<slug>/.",
+      "Do not store post images in public/blog. Upload images manually and use the remote URL in content.",
     );
   }
 }
 
-function checkFlatBlogFiles() {
+function checkNestedBlogEntries() {
   const blogDir = path.join(CONTENT_DIR, "blog");
   if (!fs.existsSync(blogDir)) {
     return;
@@ -324,19 +321,14 @@ function checkFlatBlogFiles() {
 
   const entries = fs.readdirSync(blogDir, { withFileTypes: true });
   for (const entry of entries) {
-    if (!entry.isFile()) {
-      continue;
-    }
-
-    const ext = path.extname(entry.name).toLowerCase();
-    if (!CONTENT_EXTENSIONS.has(ext)) {
+    if (!entry.isDirectory()) {
       continue;
     }
 
     addIssue(
       path.join(blogDir, entry.name),
       1,
-      "Blog posts must live in content/blog/<slug>/index.mdx (or .md), not directly under content/blog/.",
+      "Blog posts must live directly under content/blog as flat .md or .mdx files. Upload images manually and reference their remote URLs.",
     );
   }
 }
@@ -351,7 +343,7 @@ function checkTrackedContentImageFiles(contentPaths) {
     addIssue(
       filePath,
       1,
-      "Image files under content/ are temporary only. Wait for the automated R2 cleanup pull request or ask a maintainer for help.",
+      "Do not store image files under content/. Upload images manually and reference their remote URLs.",
     );
   }
 }
@@ -436,7 +428,7 @@ function checkMarkdownLinks(filePath, body) {
 
 function main() {
   checkLegacyPublicBlogFolder();
-  checkFlatBlogFiles();
+  checkNestedBlogEntries();
 
   const trackedContentPaths = listTrackedContentFiles();
   checkTrackedContentImageFiles(trackedContentPaths);

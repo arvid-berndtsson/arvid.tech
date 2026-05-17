@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "pnpm exec astro dev",
-    "build": "pnpm run content:assets:sync:r2 && pnpm exec astro check && pnpm exec astro build",
+    "build": "pnpm exec astro check && pnpm exec astro build",
     "start": "pnpm exec astro build && wrangler pages dev dist",
     "lint": "eslint .",
     "test": "playwright test",
@@ -24,10 +24,7 @@
     "scripts:test": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test scripts/*.test.ts",
     "scripts:typecheck": "tsc --noEmit --skipLibCheck --target ES2022 --module NodeNext --moduleResolution NodeNext scripts/*.ts",
     "content:check": "pnpm exec astro check && pnpm content:lint && pnpm run scripts:typecheck",
-    "ai:check": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON ./scripts/check-ai-discovery-files.ts",
-    "content:assets:sync:r2": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON ./scripts/sync-blog-images-to-r2.ts",
-    "images:upload:r2": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON ./scripts/upload-blog-image-r2.ts",
-    "images:sync:r2": "pnpm run content:assets:sync:r2"
+    "ai:check": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON ./scripts/check-ai-discovery-files.ts"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^13.5.1",
