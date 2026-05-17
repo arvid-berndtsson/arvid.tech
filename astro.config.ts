@@ -3,7 +3,6 @@ import tailwindcss from "@tailwindcss/vite";
 import mdx from "@astrojs/mdx";
 import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
-import icon from "astro-icon";
 import pagefind from "astro-pagefind";
 
 // https://astro.build/config
@@ -21,7 +20,7 @@ export default defineConfig({
       },
     },
   },
-  integrations: [mdx(), react(), sitemap(), icon(), pagefind()],
+  integrations: [mdx(), react(), sitemap(), pagefind()],
   vite: {
     plugins: [tailwindcss()],
     optimizeDeps: {
