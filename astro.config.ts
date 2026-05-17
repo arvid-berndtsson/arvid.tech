@@ -26,15 +26,6 @@ export default defineConfig({
     optimizeDeps: {
       include: ["react-dom/client"],
     },
-    resolve: {
-      // Use React's edge-compatible server renderer in production so Cloudflare Workers
-      // don't hit "MessageChannel is not defined" (react-dom/server.browser uses it).
-      ...(import.meta.env.PROD && {
-        alias: {
-          "react-dom/server": "react-dom/server.edge",
-        },
-      }),
-    },
     css: {
       postcss: "./postcss.config.mjs",
     },
