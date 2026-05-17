@@ -22,7 +22,7 @@
     "blog:dedupe": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON ./scripts/dedupe-blog.ts",
     "content:lint": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON ./scripts/check-content-quality.ts",
     "scripts:test": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test scripts/*.test.ts",
-    "scripts:typecheck": "tsc --noEmit --skipLibCheck --target ES2022 --module NodeNext --moduleResolution NodeNext scripts/*.ts",
+    "scripts:typecheck": "tsc --ignoreConfig --noEmit --skipLibCheck --target ES2022 --module NodeNext --moduleResolution NodeNext scripts/*.ts",
     "content:check": "pnpm exec astro check && pnpm content:lint && pnpm run scripts:typecheck",
     "ai:check": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON ./scripts/check-ai-discovery-files.ts"
   },
