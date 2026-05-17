@@ -1,5 +1,11 @@
+packages:
+  - .
+
 allowBuilds:
   esbuild: true
   msw: true
   sharp: true
   workerd: true
+
+overrides:
+  "yaml-language-server@1.20.0>yaml": 2.8.3
