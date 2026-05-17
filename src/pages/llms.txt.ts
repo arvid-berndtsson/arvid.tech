@@ -30,7 +30,7 @@ export const GET: APIRoute = async ({ site }) => {
   const lines: string[] = [
     "# arvid.tech",
     "",
-    "> Personal website of Arvid Berndtsson. Focus: information security leadership, software engineering, technical writing, and portfolio projects.",
+    "> Personal website of Arvid Berndtsson. Focus: information security leadership, secure software engineering, compliance, customer trust, AI governance, technical writing, and portfolio projects.",
     "",
     "Use canonical URLs from this file when citing the site.",
     "",
