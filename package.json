@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "pnpm exec astro dev",
-    "build": "pnpm run images:sync:r2 && pnpm exec astro check && pnpm exec astro build",
+    "build": "pnpm exec astro check && pnpm exec astro build",
     "start": "pnpm exec astro build && wrangler pages dev dist",
     "lint": "eslint .",
     "test": "playwright test",
@@ -23,9 +23,7 @@
     "content:lint": "node ./scripts/check-content-quality.ts",
     "scripts:typecheck": "tsc --noEmit --skipLibCheck --target ES2022 --module NodeNext --moduleResolution NodeNext scripts/*.ts",
     "content:check": "pnpm exec astro check && pnpm content:lint && pnpm run scripts:typecheck",
-    "ai:check": "node ./scripts/check-ai-discovery-files.ts",
-    "images:upload:r2": "node ./scripts/upload-blog-image-r2.ts",
-    "images:sync:r2": "node ./scripts/sync-blog-images-to-r2.ts"
+    "ai:check": "node ./scripts/check-ai-discovery-files.ts"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^13.5.1",
