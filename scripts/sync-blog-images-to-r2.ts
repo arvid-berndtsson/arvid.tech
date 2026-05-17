@@ -6,8 +6,9 @@ import path from "node:path";
 import { spawnSync } from "node:child_process";
 
 const ROOT = process.cwd();
-const BLOG_DIR = path.join(ROOT, "content", "blog");
-const ALLOWED_IMAGE_EXTENSIONS = new Set([
+const CONTENT_DIR = path.join(ROOT, "content");
+const CONTENT_EXTENSIONS = new Set([".md", ".mdx"]);
+const IMAGE_EXTENSIONS = new Set([
   ".png",
   ".jpg",
   ".jpeg",
@@ -22,9 +23,17 @@ const ALLOWED_IMAGE_EXTENSIONS = new Set([
   ".heic",
   ".heif",
 ]);
+const FRONTMATTER_IMAGE_FIELDS = [
+  "coverImage",
+  "featuredImage",
+  "image",
+  "ogImage",
+  "thumbnail",
+];
+const MARKDOWN_IMAGE_REGEX = /!\[([^\]]*)\]\(([^)]+)\)/g;
 
 function log(message) {
-  console.log(`[images:sync:r2] ${message}`);
+  console.log(`[content-assets:sync:r2] ${message}`);
 }
 
 function uploadToR2(bucketName, key, absolutePath) {
@@ -53,6 +62,7 @@ function uploadToR2(bucketName, key, absolutePath) {
 function walkFiles(directory) {
   const entries = fs.readdirSync(directory, { withFileTypes: true });
   const files = [];
+
   for (const entry of entries) {
     const absolute = path.join(directory, entry.name);
     if (entry.isDirectory()) {
@@ -61,6 +71,7 @@ function walkFiles(directory) {
     }
     if (entry.isFile()) files.push(absolute);
   }
+
   return files;
 }
 
@@ -74,6 +85,88 @@ function parseFrontmatter(source) {
   };
 }
 
+function stripWrappingAngleBrackets(value) {
+  const trimmed = value.trim();
+  if (trimmed.startsWith("<") && trimmed.endsWith(">")) {
+    return trimmed.slice(1, -1).trim();
+  }
+  return trimmed;
+}
+
+function stripQueryHashAndTitle(value) {
+  let target = stripWrappingAngleBrackets(value);
+  const titleMatch = target.match(/^([^\s]+)\s+(?:"[^"]*"|'[^']*')$/);
+  if (titleMatch) target = titleMatch[1];
+  return target.split("#", 1)[0].split("?", 1)[0];
+}
+
+function isExternalOrIgnoredTarget(target) {
+  if (!target || target.startsWith("#")) return true;
+  if (target.startsWith("//")) return true;
+  return /^[a-zA-Z][a-zA-Z\d+.-]*:/.test(target);
+}
+
+function isRelativeLocalTarget(target) {
+  return target.startsWith("./") || target.startsWith("../");
+}
+
+function isAllowedImageFile(filePath) {
+  return IMAGE_EXTENSIONS.has(path.extname(filePath).toLowerCase());
+}
+
+function isInsideContent(filePath) {
+  const relative = path.relative(CONTENT_DIR, filePath);
+  return relative !== "" && !relative.startsWith("..") && !path.isAbsolute(relative);
+}
+
+function contentBaseKey(contentFilePath) {
+  const relative = path
+    .relative(CONTENT_DIR, contentFilePath)
+    .replace(/\\/g, "/");
+  const parsed = path.posix.parse(relative);
+
+  if (parsed.name === "index") {
+    return parsed.dir;
+  }
+
+  return path.posix.join(parsed.dir, parsed.name);
+}
+
+function publicUrlFor(publicHost, key) {
+  return `${publicHost}/${key}`;
+}
+
+function resolveUpload(contentFilePath, rawTarget, publicHost) {
+  const cleanTarget = stripQueryHashAndTitle(rawTarget);
+  if (isExternalOrIgnoredTarget(cleanTarget)) return null;
+  if (!isRelativeLocalTarget(cleanTarget)) return null;
+
+  const absoluteImagePath = path.resolve(path.dirname(contentFilePath), cleanTarget);
+  if (!fs.existsSync(absoluteImagePath)) {
+    log(`Skipping missing image file: ${absoluteImagePath}`);
+    return null;
+  }
+  if (!fs.statSync(absoluteImagePath).isFile()) {
+    log(`Skipping non-file image target: ${absoluteImagePath}`);
+    return null;
+  }
+  if (!isAllowedImageFile(absoluteImagePath)) {
+    log(`Skipping unsupported image format: ${absoluteImagePath}`);
+    return null;
+  }
+  if (!isInsideContent(absoluteImagePath)) {
+    log(`Skipping image outside content/: ${absoluteImagePath}`);
+    return null;
+  }
+
+  const key = `${contentBaseKey(contentFilePath)}/${path.basename(absoluteImagePath)}`;
+  return {
+    absoluteImagePath,
+    key,
+    publicUrl: publicUrlFor(publicHost, key),
+  };
+}
+
 function getFieldValue(frontmatterRaw, field) {
   const match = frontmatterRaw.match(new RegExp(`^${field}:\\s*(.+)$`, "m"));
   if (!match) return null;
@@ -82,106 +175,127 @@ function getFieldValue(frontmatterRaw, field) {
 
 function replaceFieldValue(frontmatterRaw, field, newValue) {
   const quoted = `"${newValue}"`;
-  if (new RegExp(`^${field}:\\s*(.+)$`, "m").test(frontmatterRaw)) {
-    return frontmatterRaw.replace(
-      new RegExp(`^(${field}:\\s*)(.+)$`, "m"),
-      `$1${quoted}`,
-    );
-  }
-  return `${frontmatterRaw}\n${field}: ${quoted}`;
-}
-
-function shouldUpload(value) {
-  return value && (value.startsWith("./") || value.startsWith("../"));
-}
-
-function isAllowedImageFile(filePath) {
-  const ext = path.extname(filePath).toLowerCase();
-  return ALLOWED_IMAGE_EXTENSIONS.has(ext);
-}
-
-const bucketName = process.env.R2_BLOG_BUCKET_NAME;
-const publicHost =
-  process.env.R2_BLOG_PUBLIC_HOST?.replace(/\/+$/, "") ||
-  "https://files.arvid.tech";
-
-if (!bucketName) {
-  log("R2_BLOG_BUCKET_NAME not set, skipping auto-sync.");
-  process.exit(0);
-}
-
-if (!fs.existsSync(BLOG_DIR)) {
-  log("No content/blog directory found, skipping.");
-  process.exit(0);
-}
-
-const blogIndexFiles = walkFiles(BLOG_DIR).filter((filePath) =>
-  /content\/blog\/[^/]+\/index\.(md|mdx)$/.test(filePath.replace(/\\/g, "/")),
-);
-
-let rewrites = 0;
-let uploads = 0;
-
-for (const filePath of blogIndexFiles) {
-  const normalized = filePath.replace(/\\/g, "/");
-  const slugMatch = normalized.match(
-    /content\/blog\/([^/]+)\/index\.(md|mdx)$/,
+  return frontmatterRaw.replace(
+    new RegExp(`^(${field}:\\s*)(.+)$`, "m"),
+    `$1${quoted}`,
   );
-  if (!slugMatch) continue;
-  const slug = slugMatch[1];
+}
 
-  const source = fs.readFileSync(filePath, "utf8");
-  const parsed = parseFrontmatter(source);
-  if (!parsed) continue;
-
-  let updatedFrontmatter = parsed.raw;
+function rewriteMarkdownImages(body, contentFilePath, publicHost, uploadsByPath) {
   let changed = false;
+  const rewritten = body.replace(MARKDOWN_IMAGE_REGEX, (full, alt, rawTarget) => {
+    const upload = resolveUpload(contentFilePath, rawTarget, publicHost);
+    if (!upload) return full;
 
-  for (const field of ["coverImage", "featuredImage"]) {
-    const value = getFieldValue(updatedFrontmatter, field);
+    uploadsByPath.set(upload.absoluteImagePath, upload);
+    changed = true;
+    return `![${alt}](${upload.publicUrl})`;
+  });
+
+  return { body: rewritten, changed };
+}
+
+function rewriteFrontmatter(frontmatterRaw, contentFilePath, publicHost, uploadsByPath) {
+  let changed = false;
+  let updated = frontmatterRaw;
+
+  for (const field of FRONTMATTER_IMAGE_FIELDS) {
+    const value = getFieldValue(updated, field);
     if (!value) continue;
 
-    let absoluteImagePath = "";
+    const upload = resolveUpload(contentFilePath, value, publicHost);
+    if (!upload) continue;
 
-    if (shouldUpload(value)) {
-      absoluteImagePath = path.resolve(path.dirname(filePath), value);
-      if (!fs.existsSync(absoluteImagePath)) {
-        log(`Skipping missing file for ${field}: ${absoluteImagePath}`);
-        continue;
-      }
-      if (!isAllowedImageFile(absoluteImagePath)) {
-        log(
-          `Skipping unsupported image format for ${field}: ${absoluteImagePath}`,
-        );
-        continue;
-      }
-    } else {
-      // Preserve remote URLs (e.g., Unsplash) as-is.
-      continue;
-    }
-
-    const filename = path.basename(absoluteImagePath);
-    const key = `blog/${slug}/${filename}`;
-    uploadToR2(bucketName, key, absoluteImagePath);
-    uploads += 1;
-
-    const publicUrl = `${publicHost}/${key}`;
-    updatedFrontmatter = replaceFieldValue(
-      updatedFrontmatter,
-      field,
-      publicUrl,
-    );
+    uploadsByPath.set(upload.absoluteImagePath, upload);
+    updated = replaceFieldValue(updated, field, upload.publicUrl);
     changed = true;
+  }
+
+  return { frontmatter: updated, changed };
+}
+
+function contentFiles() {
+  if (!fs.existsSync(CONTENT_DIR)) return [];
+  return walkFiles(CONTENT_DIR).filter((filePath) =>
+    CONTENT_EXTENSIONS.has(path.extname(filePath).toLowerCase()),
+  );
+}
+
+const bucketName = process.env.R2_CONTENT_BUCKET_NAME || process.env.R2_BLOG_BUCKET_NAME;
+const publicHost =
+  (process.env.R2_CONTENT_PUBLIC_HOST || process.env.R2_BLOG_PUBLIC_HOST)?.replace(
+    /\/+$/,
+    "",
+  ) || "https://files.arvid.tech";
+
+if (!bucketName) {
+  log("R2_CONTENT_BUCKET_NAME/R2_BLOG_BUCKET_NAME not set, skipping auto-sync.");
+  process.exit(0);
+}
+
+const files = contentFiles();
+if (files.length === 0) {
+  log("No content files found, skipping.");
+  process.exit(0);
+}
+
+let rewrites = 0;
+const uploadsByPath = new Map();
+
+for (const filePath of files) {
+  const source = fs.readFileSync(filePath, "utf8");
+  const parsed = parseFrontmatter(source);
+
+  let nextSource = source;
+  let changed = false;
+
+  if (parsed) {
+    const frontmatterResult = rewriteFrontmatter(
+      parsed.raw,
+      filePath,
+      publicHost,
+      uploadsByPath,
+    );
+    const body = source.slice(parsed.end);
+    const bodyResult = rewriteMarkdownImages(
+      body,
+      filePath,
+      publicHost,
+      uploadsByPath,
+    );
+
+    changed = frontmatterResult.changed || bodyResult.changed;
+    if (changed) {
+      nextSource =
+        source.slice(0, parsed.start) +
+        `---\n${frontmatterResult.frontmatter}\n---\n` +
+        bodyResult.body;
+    }
+  } else {
+    const bodyResult = rewriteMarkdownImages(
+      source,
+      filePath,
+      publicHost,
+      uploadsByPath,
+    );
+    changed = bodyResult.changed;
+    nextSource = bodyResult.body;
   }
 
   if (!changed) continue;
 
-  const updatedSource =
-    source.slice(0, parsed.start) +
-    `---\n${updatedFrontmatter}\n---\n` +
-    source.slice(parsed.end);
-  fs.writeFileSync(filePath, updatedSource, "utf8");
+  fs.writeFileSync(filePath, nextSource, "utf8");
   rewrites += 1;
 }
 
-log(`Complete. Uploaded ${uploads} image(s), updated ${rewrites} post(s).`);
+let uploads = 0;
+for (const upload of uploadsByPath.values()) {
+  uploadToR2(bucketName, upload.key, upload.absoluteImagePath);
+  uploads += 1;
+}
+
+for (const upload of uploadsByPath.values()) {
+  fs.unlinkSync(upload.absoluteImagePath);
+}
+
+log(`Complete. Uploaded ${uploads} image(s), updated ${rewrites} content file(s).`);
