@@ -111,6 +111,10 @@ function isExternalOrIgnoredTarget(target) {
   return /^[a-zA-Z][a-zA-Z\d+.-]*:/.test(target);
 }
 
+function isHttpUrl(target) {
+  return target.startsWith("http://") || target.startsWith("https://");
+}
+
 function addIssue(filePath, line, message) {
   issues.push({
     file: relativeFromRoot(filePath),
@@ -246,11 +250,11 @@ function checkBlogImageHostPolicy(filePath, frontmatter) {
       continue;
     }
 
-    if (!isExternalOrIgnoredTarget(value)) {
+    if (!isHttpUrl(value)) {
       addIssue(
         filePath,
         1,
-        `${field} must use a remote URL. Upload owned blog images manually and reference their hosted URL.`,
+        `${field} must use an http:// or https:// image URL. Upload owned blog images manually and reference their hosted URL.`,
       );
       continue;
     }

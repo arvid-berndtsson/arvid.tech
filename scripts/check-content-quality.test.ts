@@ -42,3 +42,47 @@ Body.
     /Do not store image files under content\/\. Upload images manually and reference their remote URLs\./,
   );
 });
+
+test("fails when blog image frontmatter uses non-http URL schemes", () => {
+  const invalidSchemes = [
+    "mailto:hello@example.com",
+    "data:image/svg+xml;base64,PHN2Zy8+",
+    "javascript:alert(1)",
+  ];
+
+  for (const coverImage of invalidSchemes) {
+    const workspace = fs.mkdtempSync(
+      path.join(os.tmpdir(), "content-check-url-"),
+    );
+    const blogDir = path.join(workspace, "content", "blog");
+    fs.mkdirSync(blogDir, { recursive: true });
+    fs.writeFileSync(
+      path.join(blogDir, "example-post.mdx"),
+      `---
+title: Example Post
+coverImage: "${coverImage}"
+---
+
+Body.
+`,
+      "utf8",
+    );
+
+    assert.equal(spawnSync("git", ["init"], { cwd: workspace }).status, 0);
+    assert.equal(
+      spawnSync("git", ["add", "content"], { cwd: workspace }).status,
+      0,
+    );
+
+    const result = spawnSync(process.execPath, [scriptPath], {
+      cwd: workspace,
+      encoding: "utf8",
+    });
+
+    assert.equal(result.status, 1);
+    assert.match(
+      result.stderr,
+      /coverImage must use an http:\/\/ or https:\/\/ image URL\./,
+    );
+  }
+});
