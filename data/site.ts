@@ -56,7 +56,6 @@ export const siteConfig: SiteConfig = {
   ],
   footerNavigation: [
     { name: "About", href: "/about" },
-    { name: "Contact", href: "/contact" },
     { name: "Recommendations", href: "/recommendations" },
     { name: "Projects", href: "/projects" },
     { name: "Experience", href: "/experiences" },
