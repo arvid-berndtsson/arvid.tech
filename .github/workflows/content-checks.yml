@@ -27,6 +27,11 @@ on:
       - ".github/workflows/content-checks.yml"
   workflow_dispatch:
 
+permissions:
+  contents: read
+  actions: read
+  packages: read
+
 jobs:
   content-checks:
     runs-on: ubuntu-latest
