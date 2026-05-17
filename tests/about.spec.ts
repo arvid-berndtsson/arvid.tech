@@ -15,7 +15,8 @@ test.describe("About Page", () => {
 
     const hero = page.locator("main section").first();
     const heroBox = await hero.boundingBox();
-    expect(heroBox?.height ?? 999).toBeLessThan(340);
+    const viewport = page.viewportSize();
+    expect(heroBox?.height ?? 999).toBeLessThan((viewport?.height ?? 1269) * 0.35);
 
     const skills = page.getByTestId("skills-list");
     await expect(skills.locator('[class*="rounded-full"]')).toHaveCount(0);
