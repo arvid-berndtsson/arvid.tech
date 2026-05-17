@@ -10,6 +10,21 @@ const CONTENT_DIR = path.join(ROOT, "content");
 const PUBLIC_DIR = path.join(ROOT, "public");
 
 const CONTENT_EXTENSIONS = new Set([".md", ".mdx"]);
+const IMAGE_EXTENSIONS = new Set([
+  ".png",
+  ".jpg",
+  ".jpeg",
+  ".webp",
+  ".gif",
+  ".avif",
+  ".svg",
+  ".bmp",
+  ".tif",
+  ".tiff",
+  ".ico",
+  ".heic",
+  ".heif",
+]);
 const LINK_REGEX = /(!?)\[[^\]]*\]\(([^)]+)\)/g;
 const FRONTMATTER_REGEX = /^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/;
 
@@ -326,6 +341,21 @@ function checkFlatBlogFiles() {
   }
 }
 
+function checkTrackedContentImageFiles(contentPaths) {
+  for (const filePath of contentPaths) {
+    if (!fileExists(filePath)) continue;
+
+    const ext = path.extname(filePath).toLowerCase();
+    if (!IMAGE_EXTENSIONS.has(ext)) continue;
+
+    addIssue(
+      filePath,
+      1,
+      "Image files under content/ are temporary only. Wait for the automated R2 cleanup pull request or ask a maintainer for help.",
+    );
+  }
+}
+
 function resolveLocalTarget(filePath, target, isImage) {
   const cleanTarget = stripQueryAndHash(target);
 
@@ -408,7 +438,10 @@ function main() {
   checkLegacyPublicBlogFolder();
   checkFlatBlogFiles();
 
-  const contentFiles = listTrackedContentFiles()
+  const trackedContentPaths = listTrackedContentFiles();
+  checkTrackedContentImageFiles(trackedContentPaths);
+
+  const contentFiles = trackedContentPaths
     .filter((file) => CONTENT_EXTENSIONS.has(path.extname(file).toLowerCase()))
     .filter((file) => fileExists(file))
     .filter((file) => !path.basename(file).startsWith("."));
