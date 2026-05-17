@@ -181,6 +181,18 @@ test.describe("Individual Blog Post", () => {
     }
   });
 
+  test("should show the post cover image when available", async ({ page }) => {
+    await page.goto("/blog/chat-control-2");
+
+    const article = page.getByRole("article");
+    const coverImage = article.getByRole("img", {
+      name: "A surveillance camera graffitied on a concrete wall",
+    });
+
+    await expect(coverImage).toBeVisible();
+    await expect(coverImage).toHaveAttribute("src", /images\.unsplash\.com/);
+  });
+
   test("should have back navigation", async ({ page }) => {
     await page.goto("/blog");
 
