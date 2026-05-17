@@ -15,9 +15,9 @@ export function RecommendationAvatar({
 }: RecommendationAvatarProps) {
   return (
     <Avatar
-      className={`size-10 shrink-0 rounded-full bg-amber-600 text-white ${className ?? ""}`}
+      className={`recommendation-avatar size-10 shrink-0 rounded-full ${className ?? ""}`}
     >
-      <AvatarFallback className="bg-amber-600 text-white text-sm font-semibold rounded-full">
+      <AvatarFallback className="recommendation-avatar text-sm font-semibold rounded-full">
         {name.charAt(0)}
       </AvatarFallback>
     </Avatar>

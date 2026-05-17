@@ -98,6 +98,32 @@ test.describe("Home Page", () => {
     }
   });
 
+  test("should render scroll progress from the shared layout", async ({ page }) => {
+    for (const path of ["/", "/about"]) {
+      await page.goto(path);
+      await expect(
+        page.getByRole("progressbar", { name: "Page scroll progress" }),
+      ).toHaveCount(1);
+    }
+  });
+
+  test("should prioritize writing before projects on the landing page", async ({
+    page,
+  }) => {
+    await page.goto("/");
+
+    const blogTop = await page.locator("section#blog").evaluate((section) => {
+      return section.getBoundingClientRect().top + window.scrollY;
+    });
+    const projectsTop = await page
+      .locator("section#projects")
+      .evaluate((section) => {
+        return section.getBoundingClientRect().top + window.scrollY;
+      });
+
+    expect(blogTop).toBeLessThan(projectsTop);
+  });
+
   test("should be responsive on mobile", async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 667 });
     await page.goto("/");
@@ -111,5 +137,77 @@ test.describe("Home Page", () => {
       return document.documentElement.scrollWidth > window.innerWidth;
     });
     expect(hasHorizontalScroll).toBe(false);
+  });
+
+  test("should keep the cleaned landing page details", async ({ page }) => {
+    await page.goto("/");
+
+    await expect(page.getByText("Malmö & Varberg, Sweden")).toHaveCount(0);
+    await expect(page.getByRole("navigation", { name: "Quick links" })).toHaveCount(0);
+    const removedEyebrows = page
+      .locator('main p[class*="uppercase"][class*="tracking"]')
+      .filter({ hasText: /^(Portfolio|Testimonials|Blog)$/i });
+    await expect(removedEyebrows).toHaveCount(0);
+    await expect(page.locator("main").getByText(/—|–/)).toHaveCount(0);
+
+    const cta = page.getByRole("link", { name: /view my projects/i });
+    await expect(cta).toBeVisible();
+    await expect(cta).toHaveCSS("background-color", "rgb(249, 115, 22)");
+    await expect(cta).toHaveCSS("color", "rgb(10, 10, 10)");
+
+    const recommendationsLink = page.getByRole("link", {
+      name: /view all recommendations/i,
+    });
+    await expect(recommendationsLink.locator("xpath=..")).not.toHaveClass(/border-t/);
+
+    const testimonialQuote = page.locator(".testimonial-quote").first();
+    await page.evaluate(() => document.documentElement.classList.remove("dark"));
+    await expect(testimonialQuote).toHaveCSS("color", "rgb(249, 115, 22)");
+    await page.evaluate(() => document.documentElement.classList.add("dark"));
+    await expect(testimonialQuote).toHaveCSS("color", "rgb(251, 146, 60)");
+
+    const firstProjectCard = page
+      .getByRole("link", { name: /arvid\.tech - personal website/i })
+      .first();
+    await expect(firstProjectCard.getByTestId("content-card-tags")).toContainText(
+      /^Tags:/,
+    );
+    await expect(firstProjectCard.getByTestId("content-card-tags")).not.toContainText(
+      /^Stack:/,
+    );
+    await expect(firstProjectCard.getByText("+4")).toHaveCount(0);
+  });
+
+  test("should center recommendation navigation on mobile", async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto("/");
+
+    const recommendationsLink = page.getByRole("link", {
+      name: /view all recommendations/i,
+    });
+    await expect(recommendationsLink.locator("xpath=..")).toHaveCSS(
+      "text-align",
+      "center",
+    );
+  });
+
+  test("should highlight project titles when hovering the whole card", async ({
+    page,
+    isMobile,
+  }) => {
+    test.skip(isMobile, "Hover effects are only meaningful on pointer devices");
+
+    await page.goto("/");
+    await page.evaluate(() => document.documentElement.classList.add("dark"));
+
+    const projectCard = page
+      .getByRole("link", { name: /arvid\.tech - personal website/i })
+      .first();
+    const title = projectCard.getByRole("heading", {
+      name: /arvid\.tech - personal website/i,
+    });
+
+    await projectCard.hover({ position: { x: 24, y: 24 } });
+    await expect(title).toHaveCSS("color", "rgb(251, 146, 60)");
   });
 });

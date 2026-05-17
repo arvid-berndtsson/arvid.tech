@@ -24,6 +24,9 @@ export default defineConfig({
   integrations: [mdx(), react(), sitemap(), icon(), pagefind()],
   vite: {
     plugins: [tailwindcss()],
+    optimizeDeps: {
+      include: ["react-dom/client"],
+    },
     resolve: {
       // Use React's edge-compatible server renderer in production so Cloudflare Workers
       // don't hit "MessageChannel is not defined" (react-dom/server.browser uses it).

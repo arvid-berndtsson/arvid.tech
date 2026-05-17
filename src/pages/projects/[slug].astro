@@ -135,14 +135,13 @@ const ProjectContent = renderedProject?.Content;
 
 {isCategoryPage ? (
   <BaseLayout
-    title={`${categoryLabels[props.slug]} Projects – Arvid Berndtsson`}
+    title={`${categoryLabels[props.slug]} Projects - Arvid Berndtsson`}
     description={categoryDescriptions[props.slug]}
     structuredData={itemListData}
   >
     <div class="bg-background pt-8 pb-16">
       <ContentContainer>
         <header class="mb-10">
-          <p class="text-xs font-semibold uppercase tracking-[0.2em] text-amber-800 dark:text-amber-400 mb-3">Projects Category</p>
           <h1 class="text-4xl sm:text-5xl font-bold tracking-tight mb-4">{categoryLabels[props.slug]}</h1>
           <p class="text-lg text-muted-foreground max-w-3xl">{categoryDescriptions[props.slug]}</p>
         </header>
@@ -154,7 +153,7 @@ const ProjectContent = renderedProject?.Content;
               <ul class="space-y-3">
                 {props.featured.map((project) => (
                   <li>
-                    <a href={`/projects/${project.id}`} class="font-semibold text-orange-700 dark:text-orange-400 hover:underline">{project.data.title}</a>
+                    <a href={`/projects/${project.id}`} class="font-semibold text-orange-500 dark:text-orange-400 hover:underline">{project.data.title}</a>
                     <p class="text-sm text-muted-foreground">{project.data.summary}</p>
                   </li>
                 ))}
@@ -167,7 +166,7 @@ const ProjectContent = renderedProject?.Content;
                 {props.projects.map((project) => (
                   <li class="rounded-xl border border-border/60 p-4">
                     <div class="flex flex-wrap items-center justify-between gap-3">
-                      <a href={`/projects/${project.id}`} class="font-semibold text-orange-700 dark:text-orange-400 hover:underline">{project.data.title}</a>
+                      <a href={`/projects/${project.id}`} class="font-semibold text-orange-500 dark:text-orange-400 hover:underline">{project.data.title}</a>
                       <span class="text-xs rounded-full bg-muted px-3 py-1">{statusLabel(project.data.status)}</span>
                     </div>
                     <p class="text-sm text-muted-foreground mt-2">{project.data.summary}</p>
@@ -181,7 +180,7 @@ const ProjectContent = renderedProject?.Content;
               <ul class="space-y-2">
                 {props.relatedResearch.map((post) => (
                   <li>
-                    <a href={`/blog/${post.id}`} class="text-orange-700 dark:text-orange-400 hover:underline">{post.data.title}</a>
+                    <a href={`/blog/${post.id}`} class="text-orange-500 dark:text-orange-400 hover:underline">{post.data.title}</a>
                   </li>
                 ))}
               </ul>
@@ -190,7 +189,7 @@ const ProjectContent = renderedProject?.Content;
             <section>
               <h2 class="text-2xl font-semibold tracking-tight mb-3">Next step</h2>
               <p class="text-muted-foreground">
-                Continue to the <a href="/tools" class="font-semibold text-orange-700 dark:text-orange-400 hover:underline">tools catalog</a> or return to the <a href="/projects" class="font-semibold text-orange-700 dark:text-orange-400 hover:underline">complete project index</a>.
+                Continue to the <a href="/tools" class="font-semibold text-orange-500 dark:text-orange-400 hover:underline">tools catalog</a> or return to the <a href="/projects" class="font-semibold text-orange-500 dark:text-orange-400 hover:underline">complete project index</a>.
               </p>
             </section>
           </>
@@ -204,7 +203,7 @@ const ProjectContent = renderedProject?.Content;
                 {props.projects.map((project) => (
                   <li class="rounded-xl border border-border/60 p-4">
                     <div class="flex flex-wrap items-center justify-between gap-3">
-                      <a href={`/projects/${project.id}`} class="font-semibold text-orange-700 dark:text-orange-400 hover:underline">{project.data.title}</a>
+                      <a href={`/projects/${project.id}`} class="font-semibold text-orange-500 dark:text-orange-400 hover:underline">{project.data.title}</a>
                       <span class="text-xs rounded-full bg-muted px-3 py-1">{statusLabel(project.data.status)}</span>
                     </div>
                     <p class="text-sm text-muted-foreground mt-2">{project.data.summary}</p>
@@ -213,7 +212,7 @@ const ProjectContent = renderedProject?.Content;
               </ul>
             </section>
             <p class="text-muted-foreground">
-              Explore supporting writeups in <a href="/security-research" class="font-semibold text-orange-700 dark:text-orange-400 hover:underline">security research</a>, or return to the <a href="/projects" class="font-semibold text-orange-700 dark:text-orange-400 hover:underline">projects index</a>.
+              Explore supporting writeups in <a href="/security-research" class="font-semibold text-orange-500 dark:text-orange-400 hover:underline">security research</a>, or return to the <a href="/projects" class="font-semibold text-orange-500 dark:text-orange-400 hover:underline">projects index</a>.
             </p>
           </>
         )}
@@ -222,7 +221,7 @@ const ProjectContent = renderedProject?.Content;
   </BaseLayout>
 ) : (
   <BaseLayout
-    title={`${props.project.data.title} Project – Arvid Berndtsson`}
+    title={`${props.project.data.title} Project - Arvid Berndtsson`}
     description={props.project.data.summary}
     structuredData={softwareSourceCodeData}
   >
@@ -230,9 +229,9 @@ const ProjectContent = renderedProject?.Content;
       <ContentContainer innerTag="article">
         <header class="mb-12">
           <div class="flex flex-wrap gap-2 mb-5 text-sm">
-            <a href="/projects" class="text-orange-700 dark:text-orange-400 hover:underline">Projects</a>
+            <a href="/projects" class="text-orange-500 dark:text-orange-400 hover:underline">Projects</a>
             <span class="text-muted-foreground">/</span>
-            <a href={`/projects/${props.project.data.category}`} class="text-orange-700 dark:text-orange-400 hover:underline">{categoryLabels[props.project.data.category]}</a>
+            <a href={`/projects/${props.project.data.category}`} class="text-orange-500 dark:text-orange-400 hover:underline">{categoryLabels[props.project.data.category]}</a>
             <span class="text-muted-foreground">/</span>
             <span class="text-muted-foreground">{props.project.data.title}</span>
           </div>
@@ -244,7 +243,7 @@ const ProjectContent = renderedProject?.Content;
             <span class="rounded-full bg-muted px-3 py-1">{statusLabel(props.project.data.status)}</span>
             <span class="rounded-full bg-muted px-3 py-1">{props.project.data.language}</span>
             {props.project.data.tags.map((tag) => (
-              <a href={`/tags/${tag}`} class="rounded-full bg-muted px-3 py-1 hover:text-orange-600 dark:hover:text-orange-400">{tag}</a>
+              <a href={`/tags/${tag}`} class="rounded-full bg-muted px-3 py-1 hover:text-orange-500 dark:hover:text-orange-400">{tag}</a>
             ))}
           </div>
         </header>
@@ -287,10 +286,10 @@ const ProjectContent = renderedProject?.Content;
           <section class="mb-10">
             <h2 class="text-2xl font-semibold tracking-tight mb-3">Links</h2>
             <ul class="space-y-2">
-              {props.project.data.repoUrl && <li><a href={props.project.data.repoUrl} target="_blank" rel="noopener noreferrer" class="text-orange-700 dark:text-orange-400 hover:underline">Source repository</a></li>}
-              {props.project.data.docsUrl && <li><a href={props.project.data.docsUrl} target="_blank" rel="noopener noreferrer" class="text-orange-700 dark:text-orange-400 hover:underline">Documentation</a></li>}
-              {props.project.data.demoUrl && <li><a href={props.project.data.demoUrl} target="_blank" rel="noopener noreferrer" class="text-orange-700 dark:text-orange-400 hover:underline">Live demo</a></li>}
-              {props.project.data.repoUrl && <li><a href={`${props.project.data.repoUrl}/releases`} target="_blank" rel="noopener noreferrer" class="text-orange-700 dark:text-orange-400 hover:underline">Release notes</a></li>}
+              {props.project.data.repoUrl && <li><a href={props.project.data.repoUrl} target="_blank" rel="noopener noreferrer" class="text-orange-500 dark:text-orange-400 hover:underline">Source repository</a></li>}
+              {props.project.data.docsUrl && <li><a href={props.project.data.docsUrl} target="_blank" rel="noopener noreferrer" class="text-orange-500 dark:text-orange-400 hover:underline">Documentation</a></li>}
+              {props.project.data.demoUrl && <li><a href={props.project.data.demoUrl} target="_blank" rel="noopener noreferrer" class="text-orange-500 dark:text-orange-400 hover:underline">Live demo</a></li>}
+              {props.project.data.repoUrl && <li><a href={`${props.project.data.repoUrl}/releases`} target="_blank" rel="noopener noreferrer" class="text-orange-500 dark:text-orange-400 hover:underline">Release notes</a></li>}
             </ul>
           </section>
           <section class="mb-10">
@@ -299,14 +298,14 @@ const ProjectContent = renderedProject?.Content;
               <ul class="space-y-2">
                 {props.relatedPosts.map((post) => (
                   <li>
-                    <a href={`/blog/${post.id}`} class="text-orange-700 dark:text-orange-400 hover:underline">{post.data.title}</a>
+                    <a href={`/blog/${post.id}`} class="text-orange-500 dark:text-orange-400 hover:underline">{post.data.title}</a>
                     {post.data.summary && <span class="text-muted-foreground"> - {post.data.summary}</span>}
                   </li>
                 ))}
               </ul>
             ) : (
               <p class="text-muted-foreground">
-                Browse the <a href="/security-research" class="text-orange-700 dark:text-orange-400 hover:underline">security research hub</a> for related writing.
+                Browse the <a href="/security-research" class="text-orange-500 dark:text-orange-400 hover:underline">security research hub</a> for related writing.
               </p>
             )}
           </section>
@@ -316,7 +315,7 @@ const ProjectContent = renderedProject?.Content;
               <ul class="space-y-2">
                 {props.categoryProjects.map((entry) => (
                   <li>
-                    <a href={`/projects/${entry.id}`} class="text-orange-700 dark:text-orange-400 hover:underline">{entry.data.title}</a>
+                    <a href={`/projects/${entry.id}`} class="text-orange-500 dark:text-orange-400 hover:underline">{entry.data.title}</a>
                   </li>
                 ))}
               </ul>
@@ -324,7 +323,7 @@ const ProjectContent = renderedProject?.Content;
           )}
           <section>
             <p>
-              <a href={`/projects/${props.project.data.category}`} class="text-orange-700 dark:text-orange-400 hover:underline">
+              <a href={`/projects/${props.project.data.category}`} class="text-orange-500 dark:text-orange-400 hover:underline">
                 Back to {categoryLabels[props.project.data.category]} projects
               </a>
             </p>
