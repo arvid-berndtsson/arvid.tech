@@ -9,6 +9,7 @@ on:
       - "public/**"
       - "src/content.config.ts"
       - "scripts/check-content-quality.ts"
+      - "scripts/*.test.ts"
       - "package.json"
       - "pnpm-lock.yaml"
       - ".github/workflows/content-checks.yml"
@@ -20,6 +21,7 @@ on:
       - "public/**"
       - "src/content.config.ts"
       - "scripts/check-content-quality.ts"
+      - "scripts/*.test.ts"
       - "package.json"
       - "pnpm-lock.yaml"
       - ".github/workflows/content-checks.yml"
@@ -49,3 +51,6 @@ jobs:
 
       - name: Run content checks
         run: pnpm content:check
+
+      - name: Run script regression tests
+        run: pnpm run scripts:test
