@@ -8,6 +8,11 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+  actions: read
+  packages: read
+
 jobs:
   e2e:
     name: E2E tests
