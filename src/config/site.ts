@@ -36,11 +36,11 @@ export const siteConfig: SiteConfig = {
   name: "Arvid Berndtsson",
   title: "Information Security Lead & Full‑Stack Developer",
   description:
-    "I help companies keep data safe and build reliable software. Focus areas: ISO 27001, SOC 2, risk management, data loss prevention, incident response, and modern web apps. Based in Malmö & Varberg.",
+    "I help companies build practical security programs and reliable software. Focus areas: ISO 27001, SOC 2, TISAX readiness, secure development, incident readiness, AI governance, and modern web apps. Based in Malmö & Varberg.",
   descriptionHero:
-    "I help companies keep data safe and build reliable software. Focus areas: ISO 27001, SOC 2, risk management, data loss prevention, incident response, and modern web apps.",
+    "I help companies build practical security programs and reliable software. Focus areas: ISO 27001, SOC 2, TISAX readiness, secure development, incident readiness, AI governance, and modern web apps.",
   footerBlurb:
-    "I help companies keep data safe and build reliable software. Focus areas: ISO 27001, SOC 2, risk management, data loss prevention, incident response, and modern web apps.",
+    "I help companies build practical security programs and reliable software. Focus areas: ISO 27001, SOC 2, secure development, incident readiness, AI governance, and modern web apps.",
   url: "https://arvid.tech",
   email: "hej@arvid.tech",
   location: "Malmö & Varberg, Sweden",
@@ -63,7 +63,8 @@ export const siteConfig: SiteConfig = {
     { name: "Experience", href: "/experiences" },
     { name: "Blog", href: "/blog" },
   ],
-  availability: "Happy to chat about security, engineering, or ideas.",
+  availability:
+    "Happy to chat about security programs, customer trust, secure development, AI governance, or useful software.",
 };
 
 /**
