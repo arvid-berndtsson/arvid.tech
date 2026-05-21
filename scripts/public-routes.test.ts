@@ -4,6 +4,7 @@ import path from "node:path";
 import { test } from "node:test";
 
 const root = process.cwd();
+const retiredRouteRedirects = new Map<string, string>([["/contact", "/about"]]);
 const retiredRoutes = ["/contact", "/tools"];
 const sourceRoots = ["src", "data", "content"];
 const sourceFilePattern = /\.(astro|md|mdx|ts|tsx|js|jsx|json)$/;
@@ -64,5 +65,19 @@ test("retired public routes do not have pages or internal links", () => {
       .map(({ file }) => file);
 
     assert.deepEqual(references, [], `${route} should not be linked from source`);
+  }
+});
+
+test("retired public routes with replacements have redirects", () => {
+  const redirectsPath = path.join(root, "public", "_redirects");
+  const redirects = fs.readFileSync(redirectsPath, "utf8");
+
+  for (const [from, to] of retiredRouteRedirects) {
+    const redirectLine = new RegExp(
+      `^${escapeRegExp(from)}\\s+${escapeRegExp(to)}\\s+301$`,
+      "m",
+    );
+
+    assert.match(redirects, redirectLine, `${from} should redirect to ${to}`);
   }
 });
