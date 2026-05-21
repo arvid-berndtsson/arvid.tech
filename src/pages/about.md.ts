@@ -14,8 +14,12 @@ ${siteConfig.location}
 
 - Information Security Leadership
 - ISO 27001 and SOC 2
-- Risk management and incident response
-- Data loss prevention
+- TISAX readiness
+- Risk management and vendor assessments
+- Incident readiness and backup testing
+- Secure development workflows
+- Customer trust and security questionnaires
+- AI governance
 - Full-stack web development
 
 ## Contact
