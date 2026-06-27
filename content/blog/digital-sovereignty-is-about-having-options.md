@@ -1,0 +1,91 @@
+---
+title: "Digital Sovereignty Is About Having Options"
+date: 2026-06-27
+tags: ["digital-sovereignty", "cybersecurity", "cloud", "ai", "public-sector", "europe", "procurement"]
+summary: "Bli Säkerpodden’s episode on Sweden’s digital sovereignty with Daniel Melin connects directly to a discussion I keep returning to: Europe cannot keep treating critical dependency on US digital services as a harmless default."
+---
+
+I listened to [Bli Säkerpodden's episode about Sweden's digital sovereignty](https://nikkasystems.com/2026/06/26/podd-357-sveriges-digitala-suveranitet/), where Karl Emil Nikka talks with Daniel Melin from Teracom. I have followed Nikka's work for a long time, and I am a big fan of how he explains security topics in practical terms without making them shallow. This episode stood out because it goes into a topic I regularly talk about: who actually owns our infrastructure and all the services we use that our society depends on?
+
+That question matters more now than it did a few years ago. Not because every US company is bad, or because Europe should isolate itself from the rest of the world, but because our dependencies are becoming more obvious. Especially with cloud services and AI models, access is not something we can take for granted forever.
+
+## The dependency problem is no longer theoretical
+
+A lot of the discussion around digital sovereignty can easily become abstract. It can sound like policy language, procurement language, or something that only matters for governments. But the practical issue is simple: Sweden and Europe rely heavily on digital services that are controlled outside Europe, especially in the United States.
+
+That includes cloud platforms, collaboration tools, identity systems, infrastructure services, AI models, developer tools, analytics platforms, and a long list of SaaS products that modern organizations use every day. For a normal company, that might look like a commercial dependency. For a society, it becomes something bigger. If enough public services, private companies, logistics chains, farms, hospitals, municipalities, and authorities depend on the same external providers, then we have created systemic risk.
+
+The problem is not that a social media platform could disappear tomorrow. The problem is that critical workflows can depend on services whose access, pricing, availability, legal conditions, and technical behavior are controlled elsewhere. With AI, this becomes even more visible. Models can be closed down, restricted, moved behind new terms, limited by region, or made unavailable because of business or political decisions. If a model or platform becomes part of how an organization works, losing access is not just an inconvenience. It can become an operational problem.
+
+We cannot build critical capabilities on the assumption that the US will always provide continued support, access, and neutrality. Maybe it will. Maybe it will not. But "probably fine" is not a resilience strategy.
+
+## Digital sovereignty is not about isolation
+
+I do not think digital sovereignty should mean that every service must be Swedish, or even European. That would be unrealistic, expensive, and probably harmful. The goal should not be isolation; the goal should be options.
+
+Options mean we know which dependencies we have, which are acceptable, and which are unhealthy. Options mean that critical systems have exit paths. Options mean that we can choose a European provider when that makes sense. Options mean that we can run something ourselves when control matters more than convenience. Options mean that a public authority or company can decide that a service is good enough because it meets the actual need, not because it has the longest feature list.
+
+One point from the episode that I think is worth repeating is that Europe has treated this very differently from both the US and China. Europe has often been very open to buying platforms and services from all over the world. In the US, public sector purchasing strongly favors American companies. If a European company wants to sell into parts of the US government market, it often needs to establish a real US presence. In China, the market is even more closed, and domestic providers are prioritized to a completely different degree. Europe, meanwhile, has often acted as if the best product at the best price is enough, regardless of where the strategic control ends up.
+
+That openness is not necessarily wrong. I like open markets, and I do not think Europe should copy China or default to closedness. But it does become strange if Europe is the only major market that does not care about building and buying its own digital capacity. A goal like "20% or 30% of relevant digital services should come from European providers" could be a useful way to change the mindset without pretending that everything must be European. The exact number is less important than the direction: organizations should know how dependent they are, and they should intentionally create space for European alternatives.
+
+There is a big difference between using US technology and being unable to function without it. That difference is where digital sovereignty becomes practical.
+
+## Services are different from products
+
+One point from the episode that I think is important is the difference between products and services. If you buy a physical product, or even certain types of software, you may be able to keep using it even if the vendor changes direction. It might become unsupported, but it does not necessarily disappear overnight.
+
+A cloud service is different. A hosted AI model is different. A SaaS collaboration platform is different. A managed identity service is different. If the service changes, disappears, becomes unavailable in your region, changes pricing, removes a feature, or is restricted by a government decision, you do not have the same kind of fallback. You cannot put a cloud service on a shelf and keep using the old one during a crisis.
+
+This does not mean services are bad. They are often useful, efficient, and secure when operated well. But they create a different kind of dependency, and we need to treat that dependency honestly.
+
+## Procurement should describe needs, not copy the dominant platforms
+
+One of the most interesting parts of the episode was the discussion about requirements. When organizations look for alternatives to large dominant platforms, the question often becomes: "Can this replace Microsoft Teams?" or "Can this replace Microsoft 365?" or "Can this replace ChatGPT?" That framing is usually a trap.
+
+If the requirement is "build the same thing as the market leader, with all the same features, integrations, polish, history, and ecosystem", then almost nobody can compete. Especially not a smaller European provider. But that does not mean the basic product category is impossible to build. Many of the core functions in these tools are not magical: chat, video meetings, file sharing, permissions, search, admin settings, and integrations can be described clearly. A better question is: what do we actually need?
+
+For a collaboration platform, that could mean:
+
+- What chat functions do we need?
+- What video conferencing functions do we need?
+- What file-sharing functions do we need?
+- What identity and access controls do we need?
+- What audit logs do we need?
+- What data residency guarantees do we need?
+- What should continue working during a crisis?
+- What does the organization need to control itself?
+
+That is very different from asking for a clone of an existing platform. It does not mean we cannot build something similar in the same category. It means we should write a clear specification for the functions that matter, and then let builders solve those needs in a way that fits European requirements for control, data residency, security, and resilience. The same applies to AI tools. Instead of asking for a European ChatGPT clone that behaves exactly like OpenAI's product, we should ask what enterprise users, developers, security teams, public authorities, and regulated organizations actually need from a generative AI interface.
+
+## The state can be an anchor customer
+
+Another idea from the episode that I liked was the concept of an anchor customer. A state agency, or a group of public sector organizations, could define a real need and become an early serious customer for a provider that can meet it over time, not by lowering important requirements, but by avoiding the impossible requirement that a smaller provider must match every feature of a market leader from day one.
+
+That could help European companies move from startups to scale-ups. Europe is not bad at creating startups. The problem is that too many of them never become large, durable European companies. They either fail to scale, shift focus to the US market, or get acquired by larger companies, often US-based. When that happens, the product might survive, but strategic control, customer relationships, and long-term direction can shift elsewhere.
+
+We have interesting European companies today. Lovable is one example that comes to mind. I hope companies like that can grow into strong, independent European platforms. Still, I would also not be surprised if many successful tools in this category are acquired in the coming years. Sometimes they are bought for the technology. Sometimes for the team. Sometimes for the customers.
+
+If Europe wants alternatives, it needs more than ideas. It needs customers, procurement, capital, patience, and clear demand.
+
+## We should tell the market what is missing
+
+If we want better tools, we should be clearer about what we are missing. That is one area where public sector organizations, enterprises, and security teams could do much better. Instead of quietly accepting that the only realistic option is the default US platform, they could publish more functional requirements and explain the gaps.
+
+Not "we need a perfect copy of Teams", and not "we need a perfect copy of ChatGPT". Instead, we should be able to say that we need specific things: a certain kind of access control, auditability, a deployment model, model governance, an integration layer, data residency, and an admin experience.
+
+That kind of clarity can spark innovation. It gives builders something to aim for. It signals to investors that there is demand. It gives procurement teams a better way to evaluate alternatives. And maybe most importantly, it changes the mindset from "there are no alternatives" to "what would an alternative need to become viable?"
+
+## One example: a European enterprise AI workspace
+
+This same way of thinking applies to AI tools. Instead of asking someone to build a perfect European copy of ChatGPT, let's describe what we actually need from this product category. For me, one missing tool is an enterprise AI workspace where an organization can choose which models are allowed, where they run, who can access them, and which tools or integrations they can use.
+
+It does not need to look exactly like ChatGPT. It does not need to interact with other applications in the same way as OpenAI, Anthropic, Microsoft, or Google do. In fact, it probably should not. A European alternative should be built around the things European organizations actually need: admin control, data residency, model governance, auditability, group-based access, tool permissions, and clear boundaries for how agents or MCP servers can interact with other systems.
+
+That is the kind of application I would love to see someone build in Europe. Not because Europe needs a pixel-perfect clone of every US platform, but because we need credible alternatives in the categories that are becoming critical to how organizations work.
+
+## Closing thought
+
+Digital sovereignty is not solved by replacing one logo with another. It is solved by understanding dependencies, defining real requirements, creating viable alternatives, and choosing control in the places where losing control would create real risk.
+
+The question is not whether every digital service must be Swedish or European. The question is which dependencies we can live with, which ones we need to reduce, and where we are currently pretending to have control when we do not.
