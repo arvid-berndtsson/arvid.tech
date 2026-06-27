@@ -1,0 +1,78 @@
+---
+title: "The European Enterprise AI Workspace I Want Someone to Build"
+date: 2026-06-27
+tags: ["ai", "enterprise-ai", "europe", "model-governance", "mcp", "security", "developer-tools"]
+summary: "A product idea for a European enterprise AI workspace: a familiar AI chat experience with an admin-managed model catalog, approved tools, group permissions, and integrations that organizations can actually adopt."
+---
+
+I keep thinking about a product category that I wish existed in a stronger European form: an enterprise AI workspace that feels familiar to use, but is built for organizations from the start. Something that gives employees a good AI chat experience, while also giving IT and security teams the admin controls they need to roll it out properly.
+
+To be clear, I am not saying someone should build a pixel-perfect ChatGPT clone. But I am also not saying the product has to be completely different just to be different. A chat interface is useful. File uploads are useful. Assistants are useful. Model selection is useful. Tool integrations are useful. History, folders, sharing, permissions, and admin settings are useful. Many of the things people like in ChatGPT, Claude, Gemini, and similar tools are not impossible to understand or describe. The point is to build something similar enough that people know how to use it, but with the enterprise controls that make it possible for organizations to actually adopt it.
+
+So here is the free idea: build a European enterprise AI workspace where users can chat with approved models, work with files, use approved tools, and create useful assistants, while admins can decide what is allowed. I would love to see this built by a European company because then EU hosting, EU contracts, EU support, and EU data handling become much easier to reason about. Most users will not care about the phrase "data sovereignty", but they will care that their company is allowed to use the tool, that it works well, and that it does not become another thing security has to block.
+
+## The user experience should be simple
+
+For users, the first version should not feel complicated. Open the workspace, start a chat, choose an approved assistant or model, attach files if allowed, and get help. The product should feel familiar enough that someone who has used ChatGPT or Claude understands it in a few minutes. If the product starts with a strange enterprise portal full of policy language, it will probably fail before people even try it.
+
+A good first version could have a clean chat interface, support for files, searchable conversation history, reusable assistants, shared team spaces, and a simple way to switch between approved models when that makes sense. Users should not have to understand the entire governance model behind the scenes. They should simply see the models, assistants, and tools they are allowed to use.
+
+## The model catalog should be admin-managed
+
+The first thing I would want as an admin is a model catalog. The organization should be able to decide which models are available, what they are called internally, who can use them, and what they are approved for. One model might be approved for general writing. Another might be approved for code. Another might be approved for sensitive internal documents. Another might only be available to a small test group.
+
+This should support different types of models and providers. An organization might want to use a European hosted model for normal work, a self-hosted open model for sensitive data, and a commercial frontier model for less sensitive tasks where quality matters more than locality. The product should not force one answer. It should make those choices visible and manageable.
+
+For developers building this, I would imagine the model catalog almost like a registry: model name, provider, endpoint, region, context length, supported modalities, cost limits, allowed groups, approved data classes, logging behavior, and status. That is not glamorous, but it is exactly the kind of thing that makes a tool usable inside companies.
+
+## Tools should be approved like apps
+
+The next thing I would want is a tool system that works more like approved apps than random plugins. Users should be able to connect the AI workspace to useful systems: Slack-style chat, Teams-style chat, Google Workspace or Microsoft 365 alternatives, spreadsheets, document stores, ticketing systems, GitHub or GitLab, internal APIs, databases, knowledge bases, and maybe MCP servers.
+
+But the important part is that tools should have permissions. A tool that can search documentation is different from a tool that can update a ticket. A tool that can read a spreadsheet is different from a tool that can send messages to a channel. A tool that can inspect a repository is different from a tool that can open pull requests. The admin experience should make these differences clear.
+
+I would like to see something like an internal app store: admins can add a connector, configure it, define scopes, assign it to groups, require approval for risky actions, and see logs of what happened. Users should not have to manually paste API keys into random assistants. Developers should be able to build integrations against a clear SDK or MCP-compatible interface, but the organization should still control which integrations are available.
+
+## Assistants should be packaged capabilities
+
+Instead of making every user choose a model, write a system prompt, connect tools, and guess what is safe, the product should make assistants a first-class concept. A company could have a writing assistant, a policy assistant, a developer assistant, a support assistant, a meeting assistant, and a spreadsheet assistant. Each assistant would have a defined model, instructions, allowed tools, allowed data sources, and access rules.
+
+This is where the product could become very practical. A support team does not need a generic AI sandbox; they need an assistant that can read support documentation, summarize a ticket, draft a reply, and maybe suggest an escalation. A developer team might need an assistant that can read selected repositories, explain code, generate tests, and help with pull requests. A security team might need an assistant that can summarize policies, help review alerts, and search approved internal documentation.
+
+That kind of packaging makes the product easier for users and safer for organizations. It also gives builders a clear product surface to work with. The question becomes: what assistants should exist, what tools do they need, what should they be allowed to do, and who should have access?
+
+## The admin panel is the product
+
+For an enterprise AI workspace, the admin panel is not a boring afterthought. It is probably the product. A lot of AI tools already have a decent chat interface. The harder and more valuable part is making the tool manageable across a real organization.
+
+At minimum, I would want group-based access control, SSO, SCIM provisioning, model permissions, assistant permissions, tool permissions, audit logs, usage reporting, cost controls, retention settings, data residency settings, and a way to disable or quarantine risky integrations. I would also want a clear approval flow so that a team can request a new model or tool, and IT/security can approve it without everything happening in Slack messages and spreadsheets.
+
+This does not have to be overcomplicated. The best version would make common decisions easy. For example: "This assistant is available to the engineering group", "this model can be used with internal data but not customer data", "this connector can read tickets but not update them", or "this action requires user confirmation". Those are the kinds of controls that make people comfortable enough to actually roll out a tool.
+
+## Developers should want to build on it
+
+If this is going to become useful, it should also be attractive for developers. There should be a clean way to build connectors, tools, and assistants. I would want local development support, test workspaces, clear permission scopes, good documentation, and a review process that makes sense. If MCP is supported, it should not just be "paste any server URL and hope for the best". It should have registration, approval, scopes, logging, and group assignment.
+
+A good developer experience could make this more than a single product. It could become a platform for internal AI tools. A company could build a finance assistant, a legal assistant, a compliance assistant, or a product support assistant without each team reinventing authentication, logging, permissions, and model access. External vendors could also build integrations, but the organization would still decide which ones to enable.
+
+That is the part I think could be exciting to build. Not another chatbot wrapper, but the boring and valuable layer that makes AI tools usable inside companies.
+
+## A realistic version one
+
+A first version should be focused. It does not need to replace Microsoft 365, ChatGPT Enterprise, Claude Enterprise, every developer agent, and every internal automation tool at once. It could start with a clean chat experience, an admin-managed model catalog, SSO, groups, basic assistants, file upload, audit logs, and a small set of useful integrations.
+
+For integrations, I would probably start with things many organizations understand: a document store, a spreadsheet-like tool, a ticketing system, a code repository, and an internal knowledge base. The first version does not need hundreds of connectors. It needs a few connectors that are well-designed, permissioned, logged, and easy to explain.
+
+If that works, the product can grow from there: more connectors, better assistant templates, stronger policy controls, evaluation tools, cost management, support for more model providers, self-hosting options, and better workflows for regulated teams. But the core promise should stay simple: employees get useful AI, and the organization keeps control.
+
+## Why Europe?
+
+I want this built in Europe because I think Europe should have credible products in categories that are becoming important to everyday work. The reason is not that every model must be European or that every integration must stay inside one region forever. The reason is more practical: if a European company builds this well, it becomes easier for European organizations to buy it, trust it, host it in the EU, negotiate contracts, get support, and understand what happens to their data.
+
+That matters, but it should not be the only selling point. The product still has to be good. Developers should want to build on it. Employees should want to use it. Admins should feel that it makes their job easier, not harder. If the product is only sold with compliance language, it will probably be boring. If it is genuinely useful and also gives European organizations a safer option, then it becomes much more interesting.
+
+## The thing I want
+
+The thing I want is not a clone. It is also not some abstract policy platform that normal users will never open. It is a practical AI workspace: familiar chat experience, approved models, useful assistants, real integrations, developer-friendly tooling, and an admin layer that makes it possible to roll out without losing control.
+
+If someone is building this in Europe, I want to see it. And if nobody is building it yet, I think someone should.
