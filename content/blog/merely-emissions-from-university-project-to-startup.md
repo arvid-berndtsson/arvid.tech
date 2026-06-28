@@ -9,7 +9,7 @@ coverImageCreditUrl: "https://unsplash.com/@nate_dumlao"
 
 ---
 
-During a course at&nbsp;[Malmö University](https://mau.se/), my co-founder&nbsp;[Ellie](https://www.linkedin.com/in/ellie-fagerberg/)&nbsp;and I came up with the idea for a sustainability tool to measure websites. We formed a team called Merely Emissions and started to work on the project, facing challenges and adjusting our plans to meet the course requirements. As the university project ended, we saw the potential for our idea to become a startup and participated in the&nbsp;[Level Up](https://malmo.drivhuset.se/level-up/)&nbsp;program offered by&nbsp;[Drivhuset](https://malmo.drivhuset.se/). We continue the journey independently, reaching out to industry professionals and refining our product.
+During a course at [Malmö University](https://mau.se/), my co-founder [Ellie](https://www.linkedin.com/in/ellie-fagerberg/) and I came up with the idea for a sustainability tool to measure websites. We formed a team called Merely Emissions and started to work on the project, facing challenges and adjusting our plans to meet the course requirements. As the university project ended, we saw the potential for our idea to become a startup and participated in the [Level Up](https://malmo.drivhuset.se/level-up/) program offered by [Drivhuset](https://malmo.drivhuset.se/). We continue the journey independently, reaching out to industry professionals and refining our product.
 
 ## The Backstory - The months of theory and ideation
 
@@ -29,14 +29,14 @@ When we were done creating the slides, we sent them in, and some weeks later, we
 
 The four other projects I decided I would like to join if ours did not make it was:
 
-- **EnTillTack**&nbsp;– This was supposed to become an ordering web app when you were in a bar, so you did not have to get a waiter’s attention or walk to the bar yourself. 🍻
-- **Stickling**&nbsp;– This became a trading market for people to change seedlings with each other. A platform for people who love plants! 🌱
-- **Pingo**&nbsp;– A Bingo board for nights out that is missing that extra spark. Pingo was supposed to be a bingo board where people were able to create their own bingo boards before going out and competing with each other for the night to see who could get the most amount of bingos. 📝
-- **Blaze and Blast**&nbsp;– A top-down shooting game. When they showed some concept photos and talked about it, It reminded me of a game I used to play when I was younger. 👶🏼🎮
+- **EnTillTack** – This was supposed to become an ordering web app when you were in a bar, so you did not have to get a waiter’s attention or walk to the bar yourself. 🍻
+- **Stickling** – This became a trading market for people to change seedlings with each other. A platform for people who love plants! 🌱
+- **Pingo** – A Bingo board for nights out that is missing that extra spark. Pingo was supposed to be a bingo board where people were able to create their own bingo boards before going out and competing with each other for the night to see who could get the most amount of bingos. 📝
+- **Blaze and Blast** – A top-down shooting game. When they showed some concept photos and talked about it, It reminded me of a game I used to play when I was younger. 👶🏼🎮
 
 ## Merely Emissions - The university project started
 
-WE MADE IT! 🎉&nbsp;Ellie and I had got three other amazing students onboard. We were now 5 team members:&nbsp;[Ellie Fagerberg](https://www.linkedin.com/in/ellie-fagerberg/),&nbsp;[Arvid Berndtsson](https://l.arvid.tech/linkedin),&nbsp;[Hannah Lindbäck](https://www.linkedin.com/in/hannah-lindb%C3%A4ck-42800417a/), Henrik Persson, and&nbsp;[Menel Abdennour](https://www.linkedin.com/in/menel-abdennour-24b294237/). We were set for a great start.
+WE MADE IT! 🎉 Ellie and I had got three other amazing students onboard. We were now 5 team members: [Ellie Fagerberg](https://www.linkedin.com/in/ellie-fagerberg/), [Arvid Berndtsson](https://l.arvid.tech/linkedin), [Hannah Lindbäck](https://www.linkedin.com/in/hannah-lindb%C3%A4ck-42800417a/), Henrik Persson, and [Menel Abdennour](https://www.linkedin.com/in/menel-abdennour-24b294237/). We were set for a great start.
 
 ### The start of an exciting journey
 
@@ -52,7 +52,7 @@ And so we were off! 🚀
 
 ### Reflections on Merely Emissions a few weeks in
 
-We thought it would be a fun course, but it was not. It was and probably will be one of the most stressful courses during my time at Malmö University. The flow of how a project is supposed to be run was so outdated that sometimes suggestions of running stuff according to&nbsp;[RUP](https://en.wikipedia.org/wiki/Rational_unified_process)&nbsp;were altered since it was “modern”, according to teachers. In these situations, I was delighted that I had participated in software development projects before. I knew this was not how it is done anymore (at least not everywhere).
+We thought it would be a fun course, but it was not. It was and probably will be one of the most stressful courses during my time at Malmö University. The flow of how a project is supposed to be run was so outdated that sometimes suggestions of running stuff according to [RUP](https://en.wikipedia.org/wiki/Rational_unified_process) were altered since it was “modern”, according to teachers. In these situations, I was delighted that I had participated in software development projects before. I knew this was not how it is done anymore (at least not everywhere).
 
 Regarding the programming part, we had done 80% document writing and 20% code and design in week three since the course required that everything be documented. This meant we had spent 72 hours on documents, rewriting templates, reviewing each other’s changes, and so on. Seventy-two hours because we were only allowed to spend 18 hours a week on the project due to restrictions of the course and the other courses we also had in the meantime.
 

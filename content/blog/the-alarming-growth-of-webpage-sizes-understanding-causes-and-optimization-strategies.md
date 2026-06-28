@@ -5,7 +5,7 @@ tags: ["sustainability", "web-development"]
 summary: "Discover the causes of webpage size growth and learn effective optimization strategies to improve performance and sustainability."
 ---
 
-Websites have undergone significant transformation in recent years, with one particularly concerning trend emerging: the exponential growth of webpage sizes. Earlier this year, we took a break from [Merely Emissions](__GHOST_URL__/merelyemissions/), a project dedicated to monitoring this issue. However, the problem continues to escalate as companies prioritize feature-rich websites over efficiency, often due to a lack of awareness about the environmental and performance implications. In this article, we'll explore the statistics behind webpage size increases, the factors driving this growth, and the critical importance of optimization. Despite Merely Emissions being paused, this issue remains crucial and deserves our attention.
+Websites have undergone significant transformation in recent years, with one particularly concerning trend emerging: the exponential growth of webpage sizes. Earlier this year, we took a break from [Merely Emissions](/blog/merelyemissions/), a project dedicated to monitoring this issue. However, the problem continues to escalate as companies prioritize feature-rich websites over efficiency, often due to a lack of awareness about the environmental and performance implications. In this article, we'll explore the statistics behind webpage size increases, the factors driving this growth, and the critical importance of optimization. Despite Merely Emissions being paused, this issue remains crucial and deserves our attention.
 
 ## The Growth of Webpage Size
 
@@ -15,7 +15,7 @@ The average webpage size has increased significantly over the years:
 - [By August 2017, the average webpage size had grown to approximately 1.6 MB for desktop sites.](https://www.keycdn.com/support/the-growth-of-web-page-size)
 - [As of September 2022, the average webpage size reached about 2.2 MB for desktop sites and 2 MB for mobile sites.](https://www.keycdn.com/support/the-growth-of-web-page-size)
 
-This represents a staggering increase of 184% for desktop sites and 420% for mobile sites over the past decade.&nbsp;The trend continues, with reports indicating that as of July 2023, the [average webpage size for top sites worldwide is around 2484 KB](https://www.pingdom.com/blog/webpages-are-getting-larger-every-year-and-heres-why-it-matters/).
+This represents a staggering increase of 184% for desktop sites and 420% for mobile sites over the past decade. The trend continues, with reports indicating that as of July 2023, the [average webpage size for top sites worldwide is around 2484 KB](https://www.pingdom.com/blog/webpages-are-getting-larger-every-year-and-heres-why-it-matters/).
 
 ## Key Contributors to Increased Webpage Size
 
@@ -23,15 +23,15 @@ Several factors contribute to the growing size of webpages:
 
 ### Images
 
-Images are the most significant contributors to webpage size. [In 2017, images accounted for an average of 1,818 KB per page](https://www.seoptimer.com/blog/webpage-size/).&nbsp;As websites increasingly rely on high-quality visuals to engage users, the size of images continues to rise.
+Images are the most significant contributors to webpage size. [In 2017, images accounted for an average of 1,818 KB per page](https://www.seoptimer.com/blog/webpage-size/). As websites increasingly rely on high-quality visuals to engage users, the size of images continues to rise.
 
 #### JavaScript
 
-JavaScript plays a crucial role in creating dynamic and interactive user experiences. [The average script size for desktop sites in 2022 was 316 KB, marking a substantial increase of 350 KB compared to 2012](https://www.keycdn.com/support/the-growth-of-web-page-size).&nbsp;This growth is mainly due to the adoption of complex frameworks and libraries.
+JavaScript plays a crucial role in creating dynamic and interactive user experiences. [The average script size for desktop sites in 2022 was 316 KB, marking a substantial increase of 350 KB compared to 2012](https://www.keycdn.com/support/the-growth-of-web-page-size). This growth is mainly due to the adoption of complex frameworks and libraries.
 
 ### Videos
 
-Videos have become a staple of online content, enhancing storytelling and engagement. [While they accounted for only 7.7% of total page size in 2016, they added an average of 174 KB more than in 2010](https://www.keycdn.com/support/the-growth-of-web-page-size).&nbsp;As video content becomes more prevalent, it significantly impacts overall webpage size.
+Videos have become a staple of online content, enhancing storytelling and engagement. [While they accounted for only 7.7% of total page size in 2016, they added an average of 174 KB more than in 2010](https://www.keycdn.com/support/the-growth-of-web-page-size). As video content becomes more prevalent, it significantly impacts overall webpage size.
 
 ### Fonts
 
