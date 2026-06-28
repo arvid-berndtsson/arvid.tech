@@ -7,7 +7,7 @@ summary: "Explore my transition from a custom WordPress site to Ghost for easier
 
 Today, I wrapped up the migration of everything from my old website, [arvidberndtsson.com](https://web.archive.org/web/20240525003849/https://arvidberndtsson.com/), to this new platform. The old site now redirects visitors here, marking a fresh start for my content.
 
-While I appreciated the look of my previous website, the process of writing and publishing posts was a real challenge. Built on [WordPress](https://wordpress.org/) with a custom theme and [Elementor](https://elementor.com/), even a quick blogpost or [thought](__GHOST_URL__/blog/) could take me hours to write. Formatting issues and [semantic HTML](__GHOST_URL__/what-are-semantics-in-web-design/) struggles made the experience frustrating. I often found myself discouraged, facing a mountain of technical hurdles instead of focusing on what I love: creating content.
+While I appreciated the look of my previous website, the process of writing and publishing posts was a real challenge. Built on [WordPress](https://wordpress.org/) with a custom theme and [Elementor](https://elementor.com/), even a quick blogpost or [thought](/blog/blog/) could take me hours to write. Formatting issues and [semantic HTML](/blog/what-are-semantics-in-web-design/) struggles made the experience frustrating. I often found myself discouraged, facing a mountain of technical hurdles instead of focusing on what I love: creating content.
 
 ## Discovering Ghost
 

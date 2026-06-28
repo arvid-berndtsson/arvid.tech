@@ -21,37 +21,37 @@ Microsoft Azure, while a powerful cloud platform, has several drawbacks that can
 
 ✅
 
-**<strong style="white-space: pre-wrap;">Extensive Service Offerings</strong>**
+**Extensive Service Offerings**
 
 > With over 200 services, Azure provides a wide range of options for developers.
 
 ❌
 
-**<strong style="white-space: pre-wrap;">Complex Interface</strong>**
+**Complex Interface**
 
 > Azure's interface is notoriously cluttered and difficult to navigate. Imagine trying to find your way through a corn maze while blindfolded—good luck with that!
 
 ❌
 
-**<strong style="white-space: pre-wrap;">Hidden Costs</strong>**
+**Hidden Costs**
 
 > Azure’s pricing model can be as perplexing as trying to decipher a menu in a foreign language. You think you’re ordering a simple dish, but then you find out the breadsticks cost extra!
 
 ❌
 
-**<strong style="white-space: pre-wrap;">Steep Learning Curve</strong>**
+**Steep Learning Curve**
 
 > With over 200 different services, mastering Azure requires significant time investment.
 
 ❌
 
-**<strong style="white-space: pre-wrap;">Frequent Updates</strong>**
+**Frequent Updates**
 
 > While updates can bring improvements, the constant changes in Azure's interface can feel like playing a game where the rules change every time you score.
 
 ❌
 
-**<strong style="white-space: pre-wrap;">Limited Customization</strong>**
+**Limited Customization**
 
 > Some users find Azure's pre-configured solutions restrictive.
 
@@ -67,37 +67,37 @@ Amazon Web Services (AWS) is a robust and widely-used cloud platform that offers
 
 ✅
 
-**<strong style="white-space: pre-wrap;">Comprehensive Service Offering</strong>**
+**Comprehensive Service Offering**
 
 > AWS provides an extensive range of services, covering everything from computing power to machine learning.
 
 ✅
 
-**<strong style="white-space: pre-wrap;">Scalability</strong>**
+**Scalability**
 
 > AWS excels at handling large-scale operations. You can scale your infrastructure up or down based on your application's needs, making it suitable for enterprises and applications that require significant resources.
 
 ✅
 
-**<strong style="white-space: pre-wrap;">Global Infrastructure</strong>**
+**Global Infrastructure**
 
 > With numerous data centers worldwide, AWS offers low-latency access and high availability.
 
 ✅
 
-**<strong style="white-space: pre-wrap;">Mature Ecosystem</strong>**
+**Mature Ecosystem**
 
 > AWS has a vast marketplace of third-party tools and integrations.
 
 ❌
 
-**<strong style="white-space: pre-wrap;">Complexity</strong>**
+**Complexity**
 
 > The sheer number of services can be overwhelming, especially for smaller projects or less experienced developers. It's akin to trying to assemble IKEA furniture without the instructions—frustrating!
 
 ❌
 
-**<strong style="white-space: pre-wrap;">Pricing Complexity</strong>**
+**Pricing Complexity**
 
 > While flexible, AWS's pricing model can be difficult to understand and predict. You might think you're getting a great deal until you see the final bill—surprise!
 
@@ -107,37 +107,37 @@ In contrast, Railway offers a more streamlined and developer-friendly approach.
 
 ✅
 
-**<strong style="white-space: pre-wrap;">Intuitive Interface</strong>**
+**Intuitive Interface**
 
 > Railway's clean, modern interface makes it easy to navigate and manage projects. Unlike Azure's labyrinthine layout, Railway feels like a walk in the park—if that park had Wi-Fi.
 
 ✅
 
-**<strong style="white-space: pre-wrap;">Transparent Pricing</strong>**
+**Transparent Pricing**
 
 > Railway uses a straightforward pricing model based on actual resource usage. No hidden costs here!
 
 ✅
 
-**<strong style="white-space: pre-wrap;">Rapid Deployment</strong>**
+**Rapid Deployment**
 
 > With direct deployment from GitHub repositories, Railway significantly reduces time from code to production. You can go from "Hello World" to "Hello Users!" faster than you can say "Ling's Cars."
 
 ✅
 
-**<strong style="white-space: pre-wrap;">Automatic Scaling</strong>**
+**Automatic Scaling**
 
 > Railway handles scaling automatically based on your application's needs without requiring manual configuration. Imagine having a personal assistant who knows exactly when you need more coffee.
 
 ❌
 
-**<strong style="white-space: pre-wrap;">Limited Service Options</strong>**
+**Limited Service Options**
 
 > Compared to larger platforms, Railway offers fewer specialized services, which may not suit all project needs.
 
 ❌
 
-**<strong style="white-space: pre-wrap;">Less Established</strong>**
+**Less Established**
 
 > As a newer platform, Railway may lack some of the extensive documentation and community resources of more established providers.
 
@@ -145,7 +145,7 @@ In contrast, Railway offers a more streamlined and developer-friendly approach.
 
 ❌
 
-**<strong style="white-space: pre-wrap;">Potential for Vendor Lock-in</strong>**
+**Potential for Vendor Lock-in**
 
 > Railway's streamlined approach may make it challenging to migrate to other platforms if needed.
 
@@ -200,7 +200,7 @@ In contrast, Railway offers a more streamlined and developer-friendly approach.
 
 If you feel ready to try Railway for yourself, please feel free to use my referral link. Whether you're building your first portfolio site or looking for a more developer-friendly cloud platform.
 
-👉&nbsp;[**Get started with Railway**](https://railway.app?referralCode=o-Wsjt)
+👉 [**Get started with Railway**](https://railway.app?referralCode=o-Wsjt)
 
 By using this link, you'll get $5 to use within Railway, and so do I, which will help me maintaining my portfolio too! It's a win-win!
 
