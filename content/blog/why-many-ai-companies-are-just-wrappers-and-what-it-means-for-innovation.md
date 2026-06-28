@@ -5,7 +5,7 @@ tags: ["ai", "startup"]
 summary: "Explore the trend of companies falsely claiming AI innovation by simply integrating existing models. Learn to distinguish between genuine AI advancements and superficial applications in this critical examination of the AI industry landsc..."
 ---
 
-In the last two years, we've seen an&nbsp;explosion of&nbsp;companies claiming&nbsp;to be "AI-first" or&nbsp;"AI-driven." It&nbsp;seems like every&nbsp;startup and their&nbsp;dog is jumping&nbsp;on the AI bandwagon, eager to&nbsp;cash in on the&nbsp;hype surrounding&nbsp;artificial intelligence. But here's the&nbsp;thing: slapping an&nbsp;OpenAI GPT-4 wrapper&nbsp;on your product&nbsp;doesn't make&nbsp;you an AI company.
+In the last two years, we've seen an explosion of companies claiming to be "AI-first" or "AI-driven." It seems like every startup and their dog is jumping on the AI bandwagon, eager to cash in on the hype surrounding artificial intelligence. But here's the thing: slapping an OpenAI GPT-4 wrapper on your product doesn't make you an AI company.
 
 ## The Rise of AI Imposters
 
