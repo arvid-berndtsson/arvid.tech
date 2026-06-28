@@ -110,22 +110,22 @@ def run_echo_server():
 
     try:
         while True:
-# Wait for connection
-connection, address = server.accept()
-print(f"Client connected from {address}")
+            # Wait for connection
+            connection, address = server.accept()
+            print(f"Client connected from {address}")
 
-try:
-    # Handle one client
-    while True:
-        message = connection.recv(1024).decode()
-        if not message:
-            break
-        print(f"Received: {message}")
-        connection.send(message.encode())
-except Exception as e:
-    print(f"Error handling client: {e}")
-finally:
-    connection.close()
+            try:
+                # Handle one client
+                while True:
+                    message = connection.recv(1024).decode()
+                    if not message:
+                        break
+                    print(f"Received: {message}")
+                    connection.send(message.encode())
+            except Exception as e:
+                print(f"Error handling client: {e}")
+            finally:
+                connection.close()
     except KeyboardInterrupt:
         print("\nShutting down server...")
     finally:
