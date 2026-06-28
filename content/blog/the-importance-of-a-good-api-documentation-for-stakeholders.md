@@ -57,7 +57,7 @@ A variety of tools and technologies are available to assist in creating, managin
 
 ### Some options
 
-- .NET – [Kaiota](https://learn.microsoft.com/en-us/openapi/kiota/)
+- .NET – [Kiota](https://learn.microsoft.com/en-us/openapi/kiota/)
 - Typescript – [Zod](https://zod.dev/)
 - Python – [Flask-RESTX](https://flask-restx.readthedocs.io/en/latest/quickstart.html)
 
